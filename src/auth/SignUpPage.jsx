@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { styled } from '@mui/material/styles';
-import {Container, TextField, Button, Typography, Link, Box, Grid2 as Grid} from '@mui/material';
+import {Container, TextField, Button, Typography, Grid2 as Grid, Box, Link} from '@mui/material';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
@@ -15,29 +15,31 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 
 const StyledForm = styled('form')(({ theme }) => ({
     width: '100%',
-    maxWidth: 400,
+    maxWidth: 500,
     padding: theme.spacing(4),
     backgroundColor: theme.palette.background.paper,
     borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[3],
 }));
 
-function LoginPage() {
+function SignUpPage() {
     const [formData, setFormData] = useState({
         login: '',
+        email: '',
+        fullName: '',
         password: '',
+        password_confirm: '',
     });
 
     const [errors, setErrors] = useState({});
-    const { authToken, setAuthToken } = useContext(AuthContext);
-    const navigate = useNavigate();
 
-    // Якщо користувач вже авторизований, перенаправляємо на головну сторінку
+    const [registeredEmail, setRegisteredEmail] = useState('');
+
+    const { authToken } = useContext(AuthContext);
     if (authToken) {
         return <Navigate to="/" />;
     }
 
-    // Обробка змін у полях вводу
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -45,22 +47,18 @@ function LoginPage() {
         });
     };
 
-    // Обробка відправки форми
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors({}); // Очищення попередніх помилок
+        setErrors({});
 
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/login', formData);
+            const response = await axios.post('http://localhost:8080/api/auth/register', formData);
 
-            if (response.status === 200) {
-                // Логін успішний, зберігаємо токен та перенаправляємо користувача
-                setAuthToken(response.data.accessToken);
-                navigate('/'); // Перенаправляємо на головну сторінку
+            if (response.status === 201) {
+                setRegisteredEmail(response.data.data.email);
             }
         } catch (error) {
             if (error.response && error.response.data) {
-                // Обробка помилок валідації
                 const validationErrors = error.response.data.validationErrors;
                 const newErrors = {};
 
@@ -73,17 +71,26 @@ function LoginPage() {
 
                 setErrors(newErrors);
             } else {
-                // Обробка інших помилок (наприклад, мережевих)
-                console.error('Login error:', error);
+                console.error('Registration error:', error);
             }
         }
     };
+
+    if (registeredEmail.length) {
+        return (
+            <StyledContainer>
+                <Typography variant="h6" align="center">
+                    You need to confirm your email address. We sent you an email to {registeredEmail}.
+                </Typography>
+            </StyledContainer>
+        );
+    }
 
     return (
         <StyledContainer>
             <StyledForm onSubmit={handleSubmit}>
                 <Typography variant="h5" align="center" gutterBottom>
-                    Login
+                    Sign up
                 </Typography>
 
                 <TextField
@@ -106,15 +113,61 @@ function LoginPage() {
                     margin="normal"
                     required
                     fullWidth
+                    id="email"
+                    label="Email"
+                    name="email"
+                    autoComplete="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                />
+
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="fullName"
+                    label="Full Name"
+                    name="fullName"
+                    autoComplete="name"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    error={!!errors.fullName}
+                    helperText={errors.fullName}
+                />
+
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
                     name="password"
                     label="Password"
                     type="password"
                     id="password"
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                     value={formData.password}
                     onChange={handleChange}
                     error={!!errors.password}
                     helperText={errors.password}
+                />
+
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password_confirm"
+                    label="Confirm Password"
+                    type="password"
+                    id="password_confirm"
+                    autoComplete="new-password"
+                    value={formData.password_confirm}
+                    onChange={handleChange}
+                    error={!!errors.password_confirm}
+                    helperText={errors.password_confirm}
                 />
 
                 <Button
@@ -123,21 +176,14 @@ function LoginPage() {
                     variant="contained"
                     sx={{ mt: 2 }}
                 >
-                    Submit
+                    Sign up
                 </Button>
 
                 <Grid container spacing={2} sx={{ mt: 3 }}>
-                    <Grid size={6}>
+                    <Grid size={12}>
                         <Box>
                             <Typography align="center">
-                                <Link href="/register">Registration</Link>
-                            </Typography>
-                        </Box>
-                    </Grid>
-                    <Grid size={6}>
-                        <Box>
-                            <Typography align="center">
-                                <Link href="/password-reset">Password Reset</Link>
+                                Already have an account? <Link href="/sign-in">Sign in</Link>
                             </Typography>
                         </Box>
                     </Grid>
@@ -147,4 +193,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default SignUpPage;

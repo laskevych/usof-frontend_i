@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { Container, Typography, Button } from '@mui/material';
+import {Container, Typography, Button, Box} from '@mui/material';
 import axios from 'axios';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
@@ -22,7 +22,7 @@ function ConfirmEmailPage() {
             try {
                 const response = await axios.get(`http://localhost:8080/api/auth/confirm-email/${confirm_token}`);
                 if (response.status === 200) {
-                    setMessage('Your email has been successfully confirmed! You can go to the /login page to log in.');
+                    setMessage('Your email has been successfully confirmed!');
                     setIsError(false);
                 }
             } catch (error) {
@@ -36,21 +36,21 @@ function ConfirmEmailPage() {
 
     return (
         <StyledContainer>
-            <div>
-                <Typography variant="h6" align="center" gutterBottom>
+            <Box>
+                <Typography variant="h6" align="center" gutterBottom color="success">
                     {message}
                 </Typography>
                 {!isError && (
                     <Button
                         variant="contained"
                         component={RouterLink}
-                        to="/login"
+                        to="/sign-in"
                         sx={{ mt: 2 }}
                     >
-                        Go to Login
+                        Sign in
                     </Button>
                 )}
-            </div>
+            </Box>
         </StyledContainer>
     );
 }
