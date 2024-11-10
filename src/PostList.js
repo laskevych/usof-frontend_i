@@ -39,7 +39,6 @@ function PostList() {
         const queryParams = new URLSearchParams(location.search);
         queryParams.set('page', value);
         navigate(`${location.pathname}?${queryParams.toString()}`);
-        // fetchPosts();
     };
 
     if (loading) {

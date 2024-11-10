@@ -12,6 +12,8 @@ import PublicRoute from './PublicRoute';
 import Footer from "./Footer";
 import Header from "./Header";
 import {Container} from "@mui/material";
+import PostPage from "./PostPage";
+import CategoryPage from "./CategoryPage";
 
 function App() {
     return (
@@ -25,6 +27,9 @@ function App() {
                 >
                     <Routes>
                         <Route path="/" element={<HomePage />} />
+                        <Route path="/posts/:id" element={<PostPage />} />
+                        <Route path="/categories/:id/posts" element={<CategoryPage />} />
+
                         <Route
                             path="/sign-in"
                             element={

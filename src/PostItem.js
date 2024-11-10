@@ -60,6 +60,8 @@ function PostItem({ post }) {
             variant="outlined"
             tabIndex={0}
             sx={{ height: '100%' }}
+            component={RouterLink}
+            to={`/posts/${post.id}/`}
         >
             <Box
                 sx={{
@@ -69,6 +71,8 @@ function PostItem({ post }) {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '16px',
+                    textDecoration: 'none',
+                    color: 'inherit'
                 }}
             >
                 <Box
