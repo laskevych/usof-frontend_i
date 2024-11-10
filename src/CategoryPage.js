@@ -3,6 +3,7 @@ import {Box, Pagination, CircularProgress, Chip} from '@mui/material';
 import axios from 'axios';
 import PostItem from './PostItem';
 import { AuthContext } from './auth/AuthContext';
+import { useLocation, useNavigate, useParams} from 'react-router-dom';
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
