@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, CardContent, Avatar, Typography, Chip, Box, Button} from '@mui/material';
+import {Card, CardContent, Avatar, Typography, Chip, Box} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import MapsUgcOutlinedIcon from "@mui/icons-material/MapsUgcOutlined";
@@ -148,7 +148,7 @@ function PostItem({ post }) {
                     border: 'none',
                     boxShadow: 'none',
                 }} />
-                <Chip icon={<MapsUgcOutlinedIcon />} color="default" variant="outlined" label="2" sx={{
+                <Chip icon={<MapsUgcOutlinedIcon />} color="default" variant="outlined" label={post.numberOfComments} sx={{
                     border: 'none',
                     boxShadow: 'none',
                 }} />

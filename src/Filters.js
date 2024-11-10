@@ -3,7 +3,9 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button, TextField, Chec
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Grid from "@mui/material/Grid2";
-import Typography from "@mui/material/Typography";
+import AddIcon from '@mui/icons-material/Add';
+import { Link as RouterLink } from 'react-router-dom';
+
 
 function Filters() {
     const [categories, setCategories] = useState([]);
@@ -60,6 +62,13 @@ function Filters() {
 
     return (
         <Grid size={{ xs: 12, md: 4 }}>
+            <Box sx={{ mb: 2 }}>
+                <Button fullWidth variant="contained" startIcon={<AddIcon />}
+                        component={RouterLink}
+                        to="/posts/create">
+                    Create post
+                </Button>
+            </Box>
             <Box sx={{ mb: 2 }}>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 2 }}>
                     <FormControl size="small" fullWidth>

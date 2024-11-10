@@ -12,7 +12,6 @@ import {
     MenuItem, Divider
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AuthContext } from './auth/AuthContext';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {styled} from "@mui/material/styles";
 import Sitemark from './SitemarkIcon';
@@ -95,7 +94,7 @@ function Header() {
                                 <IconButton component={RouterLink} to={`/users/${user.id}`} sx={{ p: 0 }}>
                                     <Avatar alt={user.login} src={`http://localhost:8080/profile-pictures/${user.profilePicture}`} />
                                 </IconButton>
-                                <Typography variant="body2">
+                                <Typography variant="body2" sx={{ml: 1}}>
                                     {user.fullName || user.login}
                                 </Typography>
                                 <IconButton onClick={handleLogout} color="inherit">
@@ -169,16 +168,6 @@ function Header() {
                                         </MenuItem>
                                     </>
                                 )}
-                                {/*<MenuItem>*/}
-                                {/*    <Button color="primary" variant="contained" fullWidth>*/}
-                                {/*        Sign up*/}
-                                {/*    </Button>*/}
-                                {/*</MenuItem>*/}
-                                {/*<MenuItem>*/}
-                                {/*    <Button color="primary" variant="outlined" fullWidth>*/}
-                                {/*        Sign in*/}
-                                {/*    </Button>*/}
-                                {/*</MenuItem>*/}
                             </Box>
                         </Drawer>
                     </Box>

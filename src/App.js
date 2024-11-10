@@ -14,6 +14,10 @@ import Header from "./Header";
 import {Container} from "@mui/material";
 import PostPage from "./PostPage";
 import CategoryPage from "./CategoryPage";
+import PostEditPage from "./PostEditPage";
+import PostCreatePage from "./PostCreatePage";
+import UserProfilePage from "./UserProfilePage";
+import UserEditPage from "./UserEditPage";
 
 function App() {
     return (
@@ -28,7 +32,13 @@ function App() {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/posts/:id" element={<PostPage />} />
+                        <Route path="/posts/:id/edit" element={<PostEditPage />} />
+                        <Route path="/posts/create/" element={<PostCreatePage />} />
+
                         <Route path="/categories/:id/posts" element={<CategoryPage />} />
+
+                        <Route path="/users/:id" element={<UserProfilePage />} />
+                        <Route path="/users/:id/edit" element={<UserEditPage />} />
 
                         <Route
                             path="/sign-in"
