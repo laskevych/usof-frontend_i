@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import {
     AppBar,
     Toolbar,
-    Typography,
     Button,
     Avatar,
     IconButton,
@@ -14,17 +13,26 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AuthContext } from './auth/AuthContext';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {styled} from "@mui/material/styles";
 import Sitemark from './SitemarkIcon';
+import { useDispatch, useSelector } from 'react-redux';
+import Typography from "@mui/material/Typography";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { logout } from './store/userSlice';
+
 function Header() {
-    const { authToken, user } = useContext(AuthContext);
+    // Отримуємо дані користувача з Redux
+    const { authToken, user } = useSelector((state) => state.user);
 
     const [open, setOpen] = React.useState(false);
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
     };
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const StyledToolbar = styled(Toolbar)(({ theme }) => ({
         display: 'flex',
@@ -41,6 +49,12 @@ function Header() {
         boxShadow: (theme.vars || theme).shadows[1],
         padding: '8px 12px',
     }));
+
+    // Функція для виходу з акаунта
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/');
+    };
 
     return (
         <AppBar
@@ -61,21 +75,11 @@ function Header() {
                             <Button variant="text" color="info" size="small" component={RouterLink} to={`/`}>
                                 Posts
                             </Button>
-                            {/*<Button variant="text" color="info" size="small">*/}
-                            {/*    Testimonials*/}
-                            {/*</Button>*/}
-                            {/*<Button variant="text" color="info" size="small">*/}
-                            {/*    Highlights*/}
-                            {/*</Button>*/}
-                            {/*<Button variant="text" color="info" size="small">*/}
-                            {/*    Pricing*/}
-                            {/*</Button>*/}
-                            {/*<Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>*/}
-                            {/*    FAQ*/}
-                            {/*</Button>*/}
-                            {/*<Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>*/}
-                            {/*    Blog*/}
-                            {/*</Button>*/}
+                            {authToken && user?.role === 'admin' && (
+                                <Button variant="text" color="info" size="small" href="http://localhost:8080/admin" target="_blank">
+                                    Admin Panel
+                                </Button>
+                            )}
                         </Box>
                     </Box>
                     <Box
@@ -86,9 +90,19 @@ function Header() {
                         }}
                     >
                     {authToken && user ? (
-                            <IconButton component={RouterLink} to={`/users/${user.id}`}>
-                                <Avatar alt={user.login} src={'/profile-pictures/' + user.profilePicture || '/default-avatar.png'} />
-                            </IconButton>
+                        <>
+                            <Box sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'black' }}>
+                                <IconButton component={RouterLink} to={`/users/${user.id}`} sx={{ p: 0 }}>
+                                    <Avatar alt={user.login} src={`http://localhost:8080/profile-pictures/${user.profilePicture}`} />
+                                </IconButton>
+                                <Typography variant="body2">
+                                    {user.fullName || user.login}
+                                </Typography>
+                                <IconButton onClick={handleLogout} color="inherit">
+                                    <LogoutIcon />
+                                </IconButton>
+                            </Box>
+                        </>
                         ) : (
                         <>
                             <Button color="primary" variant="text" size="small" component={RouterLink} to={`/sign-in/`}>
@@ -125,23 +139,46 @@ function Header() {
                                     </IconButton>
                                 </Box>
 
-                                <MenuItem>Features</MenuItem>
-                                <MenuItem>Testimonials</MenuItem>
-                                <MenuItem>Highlights</MenuItem>
-                                <MenuItem>Pricing</MenuItem>
-                                <MenuItem>FAQ</MenuItem>
-                                <MenuItem>Blog</MenuItem>
+                                <MenuItem component={RouterLink} to={`/`}>Posts</MenuItem>
+                                {authToken && user?.role === 'admin' && (
+                                    <MenuItem href="http://localhost:8080/admin" target="_blank">Admin Panel</MenuItem>
+                                )}
                                 <Divider sx={{ my: 3 }} />
-                                <MenuItem>
-                                    <Button color="primary" variant="contained" fullWidth>
-                                        Sign up
-                                    </Button>
-                                </MenuItem>
-                                <MenuItem>
-                                    <Button color="primary" variant="outlined" fullWidth>
-                                        Sign in
-                                    </Button>
-                                </MenuItem>
+                                {authToken && user ? (
+                                    <>
+                                        <MenuItem component={RouterLink} to={`/users/${user.id}`} onClick={toggleDrawer(false)} sx={{color: "black"}}>
+                                            <Avatar alt={user.login} src={`http://localhost:8080/profile-pictures/${user.profilePicture}`} sx={{ mr: 1 }} />
+                                            {user.fullName || user.login}
+                                        </MenuItem>
+                                        <MenuItem onClick={handleLogout} sx={{color: "black"}}>
+                                            <LogoutIcon sx={{ mr: 1 }} />
+                                            Logout
+                                        </MenuItem>
+                                    </>
+                                ) : (
+                                    <>
+                                        <MenuItem>
+                                            <Button color="primary" variant="contained" fullWidth component={RouterLink} to="/sign-up" onClick={toggleDrawer(false)}>
+                                                Sign up
+                                            </Button>
+                                        </MenuItem>
+                                        <MenuItem>
+                                            <Button color="primary" variant="outlined" fullWidth component={RouterLink} to="/sign-in" onClick={toggleDrawer(false)}>
+                                                Sign in
+                                            </Button>
+                                        </MenuItem>
+                                    </>
+                                )}
+                                {/*<MenuItem>*/}
+                                {/*    <Button color="primary" variant="contained" fullWidth>*/}
+                                {/*        Sign up*/}
+                                {/*    </Button>*/}
+                                {/*</MenuItem>*/}
+                                {/*<MenuItem>*/}
+                                {/*    <Button color="primary" variant="outlined" fullWidth>*/}
+                                {/*        Sign in*/}
+                                {/*    </Button>*/}
+                                {/*</MenuItem>*/}
                             </Box>
                         </Drawer>
                     </Box>

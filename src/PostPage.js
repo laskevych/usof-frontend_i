@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import {Avatar, Box, Card, CardContent, Chip, CircularProgress, Typography} from '@mui/material';
+import {Avatar, Box, Card, CardContent, Chip, CircularProgress, IconButton, Typography} from '@mui/material';
 import axios from 'axios';
-import PostItem from './PostItem';
-import { AuthContext } from './auth/AuthContext';
 import {Link as RouterLink, useLocation, useNavigate, useParams} from 'react-router-dom';
 import Grid from "@mui/material/Grid2";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,6 +13,12 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 import MapsUgcOutlinedIcon from "@mui/icons-material/MapsUgcOutlined";
 import {styled} from "@mui/material/styles";
+import {useSelector} from "react-redux";
+
+import { Link } from '@mui/material';
+
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
@@ -65,9 +70,10 @@ function formatTimestamp(timestamp) {
 
 function PostPage() {
     const { id } = useParams();
-    const { authToken } = useContext(AuthContext);
+    const { authToken, user } = useSelector((state) => state.user);
     const [post, setPost] = useState({});
     const [likes, setLikes] = useState([]);
+    const [favoritePosts, setFavoritePosts] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchPost = async () => {
@@ -88,16 +94,84 @@ function PostPage() {
             const response = await axios.get(`http://localhost:8080/api/posts/${id}/like/`, {
                 headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
             });
-            console.log(response.data.data);
             setLikes(response.data.data);
         } catch (error) {
             console.error('Error fetching likes:', error);
         }
     }
 
+    const fetchFavoritePosts = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/posts/favorite/`, {
+                headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+            });
+            setFavoritePosts(response.data.data);
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    };
+
+    const handleFavorite = async () => {
+        try {
+            if (userHasFavorited) {
+                await axios.delete(`http://localhost:8080/api/posts/${id}/favorite/`, {
+                    headers: { Authorization: `Bearer ${authToken}` },
+                });
+            } else {
+                await axios.post(`http://localhost:8080/api/posts/${id}/favorite`, {}, {
+                    headers: { Authorization: `Bearer ${authToken}` },
+                });
+            }
+            await fetchFavoritePosts();
+        } catch (error) {
+            console.error('Error handling favorite:', error);
+        }
+    };
+
+    const handleLike = async () => {
+        try {
+            if (userHasLiked) {
+                const likeId = likes.find((like) => like.type === 'like' && like.author.id === user.id).id;
+                await axios.delete(`http://localhost:8080/api/posts/${id}/like/${likeId}`, {
+                    headers: { Authorization: `Bearer ${authToken}` },
+                });
+            } else {
+                await axios.post(`http://localhost:8080/api/posts/${id}/like`, { type: 'like' }, {
+                    headers: { Authorization: `Bearer ${authToken}` },
+                });
+            }
+            await fetchLikes();
+        } catch (error) {
+            console.error('Error handling like:', error);
+        }
+    };
+
+    const handleDislike = async () => {
+        try {
+            if (userHasDisliked) {
+                const dislikeId = likes.find((like) => like.type === 'dislike' && like.author.id === user.id).id;
+                await axios.delete(`http://localhost:8080/api/posts/${id}/like/${dislikeId}`, {
+                    headers: { Authorization: `Bearer ${authToken}` },
+                });
+            } else {
+                await axios.post(`http://localhost:8080/api/posts/${id}/like`, { type: 'dislike' }, {
+                    headers: { Authorization: `Bearer ${authToken}` },
+                });
+            }
+            await fetchLikes(); // Оновлення масиву likes
+        } catch (error) {
+            console.error('Error handling dislike:', error);
+        }
+    };
+
+    const userHasLiked = likes.some((like) => like.type === 'like' && like.author.id === user?.id);
+    const userHasDisliked = likes.some((like) => like.type === 'dislike' && like.author.id === user?.id);
+    const userHasFavorited = favoritePosts.some((favoritePost) => favoritePost.id === post.id);
+
     useEffect(() => {
         fetchPost();
         fetchLikes();
+        fetchFavoritePosts();
     }, [id]);
 
     if (loading) {
@@ -175,6 +249,8 @@ function PostPage() {
                                         clickable
                                         sx={{ mr: 1, mb: 1 }}
                                         size="small"
+                                        color="primary"
+                                        variant="outlined"
                                     />
                                 ))}
                             </Box>
@@ -191,37 +267,62 @@ function PostPage() {
                             padding: '16px',
                         }}
                     >
-                        <Box>
-                            <Chip icon={<ThumbUpOutlinedIcon />} color="default" variant="outlined" label={likes.filter(like => like.type === 'like').length} sx={{
-                                border: 'none',
-                                boxShadow: 'none',
-                            }} />
-                            <Chip icon={<ThumbUpOffAltIcon />} color="default" variant="outlined" label={likes.filter(like => like.type === 'dislike').length} sx={{
-                                border: 'none',
-                                boxShadow: 'none',
-                            }} />
-                            <Chip icon={<MapsUgcOutlinedIcon />} color="default" variant="outlined" label="2" sx={{
-                                border: 'none',
-                                boxShadow: 'none',
-                            }} />
-                            <Chip icon={<ThumbUpIcon />} color="default" variant="outlined" label={likes.filter(like => like.type === 'like').length} sx={{
-                                border: 'none',
-                                boxShadow: 'none',
-                            }} />
-                            <Chip icon={<ThumbDownIcon />} color="default" variant="outlined" label={likes.filter(like => like.type === 'dislike').length} sx={{
-                                border: 'none',
-                                boxShadow: 'none',
-                            }} />
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                            <IconButton
+                                onClick={handleLike}
+                                disabled={!authToken}
+                            >
+                                {userHasLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon />}
+                            </IconButton>
+                            <Typography>{likes.filter(like => like.type === 'like').length}</Typography>
+
+                            <IconButton
+                                onClick={handleDislike}
+                                disabled={!authToken}
+                            >
+                                {userHasDisliked ? <ThumbDownIcon color="primary" /> : <ThumbDownOffAltIcon />}
+                            </IconButton>
+                            <Typography>{likes.filter(like => like.type === 'dislike').length}</Typography>
+
+                            <IconButton onClick={handleFavorite} disabled={!authToken}>
+                                {userHasFavorited ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
+                            </IconButton>
                         </Box>
                         <Box>
-                            <Chip icon={<EditIcon />} color="default" variant="outlined" label="Edit" sx={{
-                                border: 'none',
-                                boxShadow: 'none',
-                            }} />
-                            <Chip icon={<AdminPanelSettingsIcon />} color="default" variant="outlined" label="Edit in Admin Panel" sx={{
-                                border: 'none',
-                                boxShadow: 'none',
-                            }} />
+                            {user?.id === post.author.id && (
+                                <Link
+                                    component={RouterLink}
+                                    to={`/posts/${post.id}/edit/`}
+                                    underline="none"
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        color: 'primary.main',
+                                        textDecoration: 'none'
+                                    }}
+                                >
+                                    <EditIcon sx={{ mr: 1 }} />
+                                    <Typography variant="body2">Edit</Typography>
+                                </Link>
+
+                            )}
+
+                            {user?.role === 'admin' && (
+                                <Link
+                                    href={`http://localhost:8080/admin/resources/posts/records/${post.id}/show`}
+                                    target="_blank"
+                                    underline="none"
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        color: 'primary.main',
+                                        textDecoration: 'none'
+                                    }}
+                                >
+                                    <AdminPanelSettingsIcon sx={{ mr: 1 }} />
+                                    <Typography variant="body2">Edit in Admin Panel</Typography>
+                                </Link>
+                            )}
                         </Box>
                     </Box>
                 </StyledCard>

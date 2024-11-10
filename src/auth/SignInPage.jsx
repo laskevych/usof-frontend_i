@@ -2,8 +2,9 @@ import React, { useState, useContext } from 'react';
 import { styled } from '@mui/material/styles';
 import {Container, TextField, Button, Typography, Link, Box, Grid2 as Grid} from '@mui/material';
 import axios from 'axios';
-import { AuthContext } from './AuthContext';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/userSlice';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
@@ -29,13 +30,13 @@ function SignInPage() {
     });
 
     const [errors, setErrors] = useState({});
-    const { authToken, setAuthToken } = useContext(AuthContext);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     // Якщо користувач вже авторизований, перенаправляємо на головну сторінку
-    if (authToken) {
-        return <Navigate to="/" />;
-    }
+    // if (authToken) {
+    //     return <Navigate to="/" />;
+    // }
 
     // Обробка змін у полях вводу
     const handleChange = (e) => {
@@ -54,9 +55,11 @@ function SignInPage() {
             const response = await axios.post('http://localhost:8080/api/auth/login', formData);
 
             if (response.status === 200) {
-                // Логін успішний, зберігаємо токен та перенаправляємо користувача
-                setAuthToken(response.data.accessToken);
-                navigate('/'); // Перенаправляємо на головну сторінку
+                dispatch(setUser({
+                    authToken: response.data.accessToken,
+                    user: response.data.data
+                }));
+                navigate('/');
             }
         } catch (error) {
             if (error.response && error.response.data) {

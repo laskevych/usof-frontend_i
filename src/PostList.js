@@ -6,9 +6,10 @@ import { AuthContext } from './auth/AuthContext';
 import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom';
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
+import {useSelector} from "react-redux";
 
 function PostList() {
-    const { authToken } = useContext(AuthContext);
+    const { authToken, user } = useSelector((state) => state.user);
     const [posts, setPosts] = useState([]);
     const [pagination, setPagination] = useState(null);
     const [loading, setLoading] = useState(true);

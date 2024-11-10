@@ -12,7 +12,6 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (authToken) {
       localStorage.setItem('authToken', authToken);
-      // Завантажуємо дані користувача
       axios
         .get('http://localhost:8080/api/auth/user', {
           headers: { Authorization: `Bearer ${authToken}` },

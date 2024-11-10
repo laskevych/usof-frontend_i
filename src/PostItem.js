@@ -1,9 +1,10 @@
 import React from 'react';
-import { Card, CardContent, Avatar, Typography, Chip, Box } from '@mui/material';
+import {Card, CardContent, Avatar, Typography, Chip, Box, Button} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import MapsUgcOutlinedIcon from "@mui/icons-material/MapsUgcOutlined";
 import {styled} from "@mui/material/styles";
+import { useSelector } from 'react-redux';
 
 const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
@@ -55,6 +56,8 @@ function formatTimestamp(timestamp) {
 }
 
 function PostItem({ post }) {
+    const { user } = useSelector((state) => state.user);
+
     return  (
         <StyledCard
             variant="outlined"
@@ -88,6 +91,9 @@ function PostItem({ post }) {
                         {post.author.fullName || post.author.login}
                     </Typography>
                 </Box>
+                {((user?.id === post.author.id || user?.role === 'admin') && post.status === 'inactive') && (
+                    <Chip label={post.status} size="small" />
+                )}
                 <Typography variant="caption">{formatTimestamp(post.creationAt)}</Typography>
             </Box>
             <StyledCardContent
@@ -120,6 +126,8 @@ function PostItem({ post }) {
                                 clickable
                                 sx={{ mr: 1, mb: 1 }}
                                 size="small"
+                                color="primary"
+                                variant="outlined"
                             />
                         ))}
                     </Box>
