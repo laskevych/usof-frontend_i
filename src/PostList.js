@@ -51,7 +51,7 @@ function PostList() {
     }
 
     return (
-        <Grid size={{ xs: 12, md: 8 }}>
+        <Grid size={{ xs: 12, md: 9 }}>
             <Box
                 sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}
             >

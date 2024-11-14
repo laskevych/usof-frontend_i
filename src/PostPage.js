@@ -1,24 +1,20 @@
 import React, { useEffect, useState, useContext } from 'react';
-import {Avatar, Box, Card, CardContent, Chip, CircularProgress, IconButton, Typography} from '@mui/material';
+import {Avatar, Box, Card, CardContent, Chip, CircularProgress, IconButton, Tooltip, Typography} from '@mui/material';
 import axios from 'axios';
 import {Link as RouterLink, useLocation, useNavigate, useParams} from 'react-router-dom';
 import Grid from "@mui/material/Grid2";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import EditIcon from '@mui/icons-material/Edit';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-
-import MapsUgcOutlinedIcon from "@mui/icons-material/MapsUgcOutlined";
 import {styled} from "@mui/material/styles";
 import {useSelector} from "react-redux";
-
 import { Link } from '@mui/material';
-
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import CommentsBlock from "./CommentsBlock";
 
 const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
@@ -26,15 +22,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
     padding: 0,
     height: '100%',
     backgroundColor: (theme.vars || theme).palette.background.paper,
-    textDecoration: 'none',
-    '&:hover': {
-        backgroundColor: 'transparent'
-    },
-    '&:focus-visible': {
-        outline: '3px solid',
-        outlineColor: 'hsla(210, 98%, 48%, 0.5)',
-        outlineOffset: '2px',
-    }
+    textDecoration: 'none'
 }));
 
 const StyledCardContent = styled(CardContent)({
@@ -42,30 +30,20 @@ const StyledCardContent = styled(CardContent)({
     flexDirection: 'column',
     gap: 4,
     padding: 16,
-    flexGrow: 1,
-    '&:last-child': {
-        paddingBottom: 16,
-    },
+    flexGrow: 1
 });
 
 const StyledTypography = styled(Typography)({
     display: '-webkit-box',
     WebkitBoxOrient: 'vertical',
-    WebkitLineClamp: 2,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
 });
 
 function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
-
-    const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
-
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ' +
+        date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
 function PostPage() {
@@ -129,6 +107,7 @@ function PostPage() {
     };
 
     const handleLike = async () => {
+        if (!authToken) return;
         try {
             if (userHasLiked) {
                 const likeId = likes.find((like) => like.type === 'like' && like.author.id === user.id).id;
@@ -158,7 +137,7 @@ function PostPage() {
                     headers: { Authorization: `Bearer ${authToken}` },
                 });
             }
-            await fetchLikes(); // Оновлення масиву likes
+            await fetchLikes();
         } catch (error) {
             console.error('Error handling dislike:', error);
         }
@@ -171,7 +150,9 @@ function PostPage() {
     useEffect(() => {
         fetchPost();
         fetchLikes();
-        fetchFavoritePosts();
+        if (authToken) {
+            fetchFavoritePosts();
+        }
     }, [id]);
 
     if (loading) {
@@ -198,8 +179,9 @@ function PostPage() {
                             flexDirection: 'row',
                             gap: 2,
                             alignItems: 'center',
-                            justifyContent: 'space-between',
                             padding: '16px',
+                            textDecoration: 'none',
+                            color: 'inherit'
                         }}
                     >
                         <Box
@@ -211,12 +193,13 @@ function PostPage() {
                                 key={post.author.id}
                                 alt={post.author.login}
                                 src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
-                                sx={{ width: 24, height: 24 }}
+                                sx={{ width: 36, height: 36 }}
                             />
                             <Typography variant="caption">
                                 {post.author.fullName || post.author.login}
                             </Typography>
                         </Box>
+                        <Typography>•</Typography>
                         <Typography variant="caption">{formatTimestamp(post.creationAt)}</Typography>
                     </Box>
                     <StyledCardContent
@@ -280,13 +263,17 @@ function PostPage() {
                                 onClick={handleDislike}
                                 disabled={!authToken}
                             >
-                                {userHasDisliked ? <ThumbDownIcon color="primary" /> : <ThumbDownOffAltIcon />}
+                                {userHasDisliked ? <ThumbDownIcon color="error" /> : <ThumbDownOffAltIcon />}
                             </IconButton>
                             <Typography>{likes.filter(like => like.type === 'dislike').length}</Typography>
 
-                            <IconButton onClick={handleFavorite} disabled={!authToken}>
-                                {userHasFavorited ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
-                            </IconButton>
+                            {user && (
+                                <Tooltip title="Save" placement="top">
+                                    <IconButton onClick={handleFavorite} disabled={!authToken}>
+                                        {userHasFavorited ? <BookmarkAddedIcon color="success" /> : <BookmarkAddIcon />}
+                                    </IconButton>
+                                </Tooltip>
+                            )}
                         </Box>
                         <Box>
                             {user?.id === post.author.id && (
@@ -327,6 +314,8 @@ function PostPage() {
                     </Box>
                 </StyledCard>
             </Box>
+
+            <CommentsBlock post={post}/>
         </Grid>
     );
 }

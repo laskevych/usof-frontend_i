@@ -25,7 +25,7 @@ function App() {
             <Router>
                 <Header />
                 <Container
-                    maxWidth="lg"
+                    maxWidth="md"
                     component="main"
                     sx={{ display: 'flex', flexDirection: 'column', my: 16, gap: 4 }}
                 >

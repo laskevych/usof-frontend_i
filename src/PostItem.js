@@ -5,6 +5,7 @@ import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import MapsUgcOutlinedIcon from "@mui/icons-material/MapsUgcOutlined";
 import {styled} from "@mui/material/styles";
 import { useSelector } from 'react-redux';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
@@ -13,15 +14,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
     height: '100%',
     backgroundColor: (theme.vars || theme).palette.background.paper,
     textDecoration: 'none',
-    '&:hover': {
-        backgroundColor: 'transparent',
-        cursor: 'pointer',
-    },
-    '&:focus-visible': {
-        outline: '3px solid',
-        outlineColor: 'hsla(210, 98%, 48%, 0.5)',
-        outlineOffset: '2px',
-    }
 }));
 
 const StyledCardContent = styled(CardContent)({
@@ -30,9 +22,8 @@ const StyledCardContent = styled(CardContent)({
     gap: 4,
     padding: 16,
     flexGrow: 1,
-    '&:last-child': {
-        paddingBottom: 16,
-    },
+    textDecoration: 'none',
+    color: 'black'
 });
 
 const StyledTypography = styled(Typography)({
@@ -41,18 +32,13 @@ const StyledTypography = styled(Typography)({
     WebkitLineClamp: 2,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    textDecoration: 'none'
 });
 
 function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
-
-    const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
-
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ' +
+        date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
 function PostItem({ post }) {
@@ -62,9 +48,7 @@ function PostItem({ post }) {
         <StyledCard
             variant="outlined"
             tabIndex={0}
-            sx={{ height: '100%' }}
-            component={RouterLink}
-            to={`/posts/${post.id}/`}
+            sx={{ height: '100%', opacity: post.status === 'inactive' ? 0.5 : 1}}
         >
             <Box
                 sx={{
@@ -78,23 +62,34 @@ function PostItem({ post }) {
                     color: 'inherit'
                 }}
             >
-                <Box
-                    sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 2,
+                    alignItems: 'center'
+                    }}
                 >
-                    <Avatar
-                        key={post.author.id}
-                        alt={post.author.login}
-                        src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
-                        sx={{ width: 24, height: 24 }}
-                    />
-                    <Typography variant="caption">
-                        {post.author.fullName || post.author.login}
-                    </Typography>
+                    <Box
+                        sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
+                        component={RouterLink}
+                        to={`/users/${post.author.id}/`}
+                    >
+                        <Avatar
+                            key={post.author.id}
+                            alt={post.author.login}
+                            src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
+                            sx={{ width: 36, height: 36 }}
+                        />
+                        <Typography variant="caption">
+                            {post.author.fullName || post.author.login}
+                        </Typography>
+                    </Box>
+                    <Typography>•</Typography>
+                    <Typography variant="caption">{formatTimestamp(post.creationAt)}</Typography>
                 </Box>
-                {((user?.id === post.author.id || user?.role === 'admin') && post.status === 'inactive') && (
-                    <Chip label={post.status} size="small" />
+                {post.status === 'inactive' && (
+                    <Chip label="Disabled" icon={<VisibilityOffIcon/>}></Chip>
                 )}
-                <Typography variant="caption">{formatTimestamp(post.creationAt)}</Typography>
             </Box>
             <StyledCardContent
                 sx={{
@@ -104,6 +99,8 @@ function PostItem({ post }) {
                     height: '100%',
                     pb: 0
                 }}
+                component={RouterLink}
+                to={`/posts/${post.id}/`}
             >
                 <div>
                     <Typography gutterBottom variant="h6" component="div">
@@ -140,7 +137,6 @@ function PostItem({ post }) {
                     flexDirection: 'row',
                     gap: 2,
                     alignItems: 'center',
-                    //justifyContent: 'space-between',
                     padding: '16px',
                 }}
             >
