@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Box, Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { useNavigate} from "react-router-dom";
 
 function PostForm({ post, onSubmit, onDelete }) {
+    const navigate = useNavigate();
     const { authToken } = useSelector((state) => state.user);
     const [title, setTitle] = useState(post?.title || '');
     const [content, setContent] = useState(post?.content || '');
@@ -111,7 +113,10 @@ function PostForm({ post, onSubmit, onDelete }) {
                 </Select>
             </FormControl>
             <Box mt={2}>
-                <Button type="submit" variant="contained" color="primary" fullWidth>
+                <Button type="submit" variant="contained" color="default" fullWidth onClick={() => navigate(-1)}>
+                    Back
+                </Button>
+                <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }} fullWidth>
                     Save
                 </Button>
                 {onDelete && (

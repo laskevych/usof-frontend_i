@@ -275,7 +275,7 @@ function PostPage() {
                                 </Tooltip>
                             )}
                         </Box>
-                        <Box>
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                             {user?.id === post.author.id && (
                                 <Link
                                     component={RouterLink}

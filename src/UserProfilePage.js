@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
-import { Box, Avatar, Typography, Button, Card, CircularProgress } from '@mui/material';
+import {Box, Avatar, Typography, Button, Card, CircularProgress, Chip} from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 function UserProfilePage() {
     const { id } = useParams();
@@ -17,7 +18,6 @@ function UserProfilePage() {
                 const response = await axios.get(`http://localhost:8080/api/users/${id}`, {
                     headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
                 });
-                console.log(response.data.data);
                 setUserData(response.data.data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -34,8 +34,6 @@ function UserProfilePage() {
             </Box>
         );
     }
-
-    const isEditable = user?.id === parseInt(id) || user?.role === 'admin';
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
@@ -61,16 +59,37 @@ function UserProfilePage() {
                     Rating: {userData.rating}
                 </Typography>
 
-                {isEditable && (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        sx={{ mt: 3 }}
-                        component={RouterLink}
-                        to={`/users/${id}/edit`}
-                    >
-                        Edit Profile
-                    </Button>
+                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+                    {user?.id === userData.id && (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{ mt: 3 }}
+                            component={RouterLink}
+                            to={`/users/${id}/edit`}
+                        >
+                            Edit Profile
+                        </Button>
+                    )}
+                </Box>
+                {user?.role === 'admin' && (
+                    <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+                        <Chip
+                            icon={<AdminPanelSettingsIcon />}
+                            color="primary"
+                            variant="outlined"
+                            label="Edit in Admin Panel"
+                            sx={{
+                                border: 'none',
+                                boxShadow: 'none',
+                                mt: 2
+                            }}
+                            href={`http://localhost:8080/admin/resources/users/records/${userData.id}/show`}
+                            component="a"
+                            clickable
+                            target="_blank"
+                        />
+                    </Box>
                 )}
             </Card>
         </Box>

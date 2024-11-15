@@ -2,15 +2,15 @@ import React, { useEffect, useState, useContext } from 'react';
 import {Box, Pagination, CircularProgress, Chip} from '@mui/material';
 import axios from 'axios';
 import PostItem from './PostItem';
-import { AuthContext } from './auth/AuthContext';
 import { useLocation, useNavigate, useParams} from 'react-router-dom';
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import {useSelector} from "react-redux";
 
 function CategoryPage() {
     const { id } = useParams();
-    const { authToken } = useContext(AuthContext);
+    const { authToken, user } = useSelector((state) => state.user);
     const [category, setCategory] = useState({});
     const [posts, setPosts] = useState([]);
     const [pagination, setPagination] = useState(null);
@@ -74,10 +74,23 @@ function CategoryPage() {
                     {category.title}
                 </Typography>
                 <Typography>{category.description}</Typography>
-                <Chip icon={<AdminPanelSettingsIcon />} color="default" variant="outlined" label="Edit in Admin Panel" sx={{
-                    border: 'none',
-                    boxShadow: 'none',
-                }} />
+                {user?.role === 'admin' && (
+                    <Chip
+                        icon={<AdminPanelSettingsIcon />}
+                        color="primary"
+                        variant="outlined"
+                        label="Edit in Admin Panel"
+                        sx={{
+                            border: 'none',
+                            boxShadow: 'none',
+                            mt: 2
+                        }}
+                        href={`http://localhost:8080/admin/resources/categories/records/${category.id}/show`}
+                        component="a"
+                        clickable
+                        target="_blank"
+                    />
+                )}
             </Box>
             <Box
                 sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}

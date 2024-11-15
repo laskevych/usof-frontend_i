@@ -8,16 +8,14 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
-
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
-
 import ReplyIcon from '@mui/icons-material/Reply';
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
@@ -240,6 +238,20 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     {authToken && level < 2 && (
                         <Button onClick={() => setShowReplyForm(!showReplyForm)} size="small" startIcon={<ReplyIcon />}>
                             Reply
+                        </Button>
+                    )}
+
+                    {(user?.role === 'admin') && (
+                        <Button
+                            size="small"
+                            color="default"
+                            startIcon={<AdminPanelSettingsIcon />}
+                            href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`}
+                            component="a"
+                            clickable
+                            target="_blank"
+                        >
+                            Edit in Admin Panel
                         </Button>
                     )}
 
