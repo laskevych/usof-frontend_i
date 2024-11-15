@@ -19,9 +19,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Typography from "@mui/material/Typography";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from './store/userSlice';
+import WbCloudyIcon from '@mui/icons-material/WbCloudy';
 
 function Header() {
-    // Отримуємо дані користувача з Redux
     const { authToken, user } = useSelector((state) => state.user);
 
     const [open, setOpen] = React.useState(false);
@@ -49,7 +49,6 @@ function Header() {
         padding: '8px 12px',
     }));
 
-    // Функція для виходу з акаунта
     const handleLogout = () => {
         dispatch(logout());
         navigate('/');
@@ -69,7 +68,8 @@ function Header() {
             <Container maxWidth="lg">
                 <StyledToolbar variant="dense" disableGutters>
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-                        <Sitemark />
+                        {/*<Sitemark />*/}
+                        <WbCloudyIcon color="primary" fontSize="large"/>
                         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                             <Button variant="text" color="info" size="small" component={RouterLink} to={`/`}>
                                 Posts

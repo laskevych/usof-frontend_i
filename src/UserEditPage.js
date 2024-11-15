@@ -164,9 +164,14 @@ function UserEditPage() {
                 error={!!errors.password_confirm}
                 helperText={errors.password_confirm}
             />
-            <Button type="submit" variant="contained" color="primary" sx={{ mt: 3 }}>
-                Save Changes
-            </Button>
+            <Box mt={2}>
+                <Button variant="contained" color="default" fullWidth onClick={() => navigate(-1)}>
+                    Back
+                </Button>
+                <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }} fullWidth>
+                    Save Changes
+                </Button>
+            </Box>
         </Box>
     );
 }

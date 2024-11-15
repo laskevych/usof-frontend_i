@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import PostList from './PostList';
-import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
 import {Box, Chip} from "@mui/material";
 import Filters from "./Filters";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';

@@ -80,7 +80,7 @@ function PostPage() {
 
     const fetchFavoritePosts = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/posts/favorite/`, {
+            const response = await axios.get(`http://localhost:8080/api/users/${user.id}/favorite/`, {
                 headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
             });
             setFavoritePosts(response.data.data);

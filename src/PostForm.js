@@ -113,7 +113,7 @@ function PostForm({ post, onSubmit, onDelete }) {
                 </Select>
             </FormControl>
             <Box mt={2}>
-                <Button type="submit" variant="contained" color="default" fullWidth onClick={() => navigate(-1)}>
+                <Button variant="contained" color="default" fullWidth onClick={() => navigate(-1)}>
                     Back
                 </Button>
                 <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }} fullWidth>

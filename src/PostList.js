@@ -2,9 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Box, Pagination, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import PostItem from './PostItem';
-import { AuthContext } from './auth/AuthContext';
 import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom';
-import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
 import {useSelector} from "react-redux";
 
