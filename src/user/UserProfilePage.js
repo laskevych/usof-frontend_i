@@ -99,7 +99,7 @@ function UserProfilePage() {
 
                         <Tooltip title={(userData.role === 'admin' ? 'Admin' : 'User') + ' Role'}>
                             {userData.role === 'admin' ? (
-                                <AdminPanelSettingsIcon fontSize="large" color="primary"/>
+                                <AdminPanelSettingsIcon fontSize="large" color="secondary"/>
                             ): (
                                 <PersonIcon fontSize="large"/>
                             )}
