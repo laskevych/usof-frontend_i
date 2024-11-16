@@ -38,7 +38,6 @@ function SignInPage() {
     //     return <Navigate to="/" />;
     // }
 
-    // Обробка змін у полях вводу
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -49,7 +48,7 @@ function SignInPage() {
     // Обробка відправки форми
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors({}); // Очищення попередніх помилок
+        setErrors({});
 
         try {
             const response = await axios.post('http://localhost:8080/api/auth/login', formData);
@@ -63,7 +62,6 @@ function SignInPage() {
             }
         } catch (error) {
             if (error.response && error.response.data) {
-                // Обробка помилок валідації
                 const validationErrors = error.response.data.validationErrors;
                 const newErrors = {};
 
@@ -76,7 +74,6 @@ function SignInPage() {
 
                 setErrors(newErrors);
             } else {
-                // Обробка інших помилок (наприклад, мережевих)
                 console.error('Login error:', error);
             }
         }

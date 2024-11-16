@@ -4,85 +4,124 @@ import SignInPage from './auth/SignInPage';
 import SignUpPage from './auth/SignUpPage';
 import ConfirmEmailPage from './auth/ConfirmEmailPage';
 import HomePage from './HomePage';
-import PrivateRoute from './PrivateRoute';
 import { AuthProvider } from './auth/AuthContext';
 import PasswordResetRequestPage from "./auth/PasswordResetRequestPage";
 import PasswordResetConfirmPage from "./auth/PasswordResetConfirmPage";
-import PublicRoute from './PublicRoute';
 import Footer from "./Footer";
 import Header from "./Header";
-import {Container} from "@mui/material";
+import {Box, Container} from "@mui/material";
 import PostPage from "./PostPage";
 import CategoryPage from "./CategoryPage";
 import PostEditPage from "./PostEditPage";
 import PostCreatePage from "./PostCreatePage";
 import UserProfilePage from "./UserProfilePage";
 import UserEditPage from "./UserEditPage";
+import ProtectedRoute from './auth/ProtectedRoute';
+import AuthorRoute from './auth/AuthorRoute';
+import ProfileOwnerRoute from './auth/ProfileOwnerRoute';
+import GuestRoute from "./auth/GuestRoute";
+import NotFoundPage from './NotFoundPage';
 
 function App() {
     return (
         <AuthProvider>
             <Router>
-                <Header />
-                <Container
-                    maxWidth="md"
-                    component="main"
-                    sx={{ display: 'flex', flexDirection: 'column', my: 16, gap: 4 }}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        minHeight: '100vh',
+                    }}
                 >
-                    <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/posts/:id" element={<PostPage />} />
-                        <Route path="/posts/:id/edit" element={<PostEditPage />} />
-                        <Route path="/posts/create/" element={<PostCreatePage />} />
+                    <Header />
+                    <Container
+                        maxWidth="md"
+                        component="main"
+                        sx={{ display: 'flex', flexDirection: 'column', my: 16, gap: 4 }}
+                    >
+                        <Routes>
+                            <Route
+                                path="/sign-in"
+                                element={
+                                    <GuestRoute>
+                                        <SignInPage />
+                                    </GuestRoute>
+                                }
+                            />
+                            <Route
+                                path="/sign-up"
+                                element={
+                                    <GuestRoute>
+                                        <SignUpPage />
+                                    </GuestRoute>
+                                }
+                            />
+                            <Route
+                                path="/confirm-email/:confirm_token"
+                                element={
+                                    <GuestRoute>
+                                        <ConfirmEmailPage />
+                                    </GuestRoute>
+                                }
+                            />
+                            <Route
+                                path="/password-reset"
+                                element={
+                                    <GuestRoute>
+                                        <PasswordResetRequestPage />
+                                    </GuestRoute>
+                                }
+                            />
+                            <Route
+                                path="/password-reset/:confirm_token"
+                                element={
+                                    <GuestRoute>
+                                        <PasswordResetConfirmPage />
+                                    </GuestRoute>
+                                }
+                            />
 
-                        <Route path="/categories/:id/posts" element={<CategoryPage />} />
+                            <Route path="/" element={<HomePage />} />
+                            <Route path="/posts/:id" element={<PostPage />} />
+                            <Route path="/categories/:id/posts" element={<CategoryPage />} />
+                            <Route path="/users/:id" element={<UserProfilePage />} />
 
-                        <Route path="/users/:id" element={<UserProfilePage />} />
-                        <Route path="/users/:id/edit" element={<UserEditPage />} />
+                            <Route
+                                path="/posts/create/"
+                                element={
+                                    <ProtectedRoute>
+                                        <PostCreatePage />
+                                    </ProtectedRoute>
+                                }
+                            />
 
-                        <Route
-                            path="/sign-in"
-                            element={
-                                <PublicRoute>
-                                    <SignInPage />
-                                </PublicRoute>
-                            }
-                        />
-                        <Route
-                            path="/sign-up"
-                            element={
-                                <PublicRoute>
-                                    <SignUpPage />
-                                </PublicRoute>
-                            }
-                        />
-                        <Route
-                            path="/confirm-email/:confirm_token"
-                            element={
-                                <PublicRoute>
-                                    <ConfirmEmailPage />
-                                </PublicRoute>
-                            }
-                        />
-                        <Route
-                            path="/password-reset"
-                            element={
-                                <PublicRoute>
-                                    <PasswordResetRequestPage />
-                                </PublicRoute>
-                            }
-                        />
-                        <Route
-                            path="/password-reset/:confirm_token"
-                            element={
-                                <PublicRoute>
-                                    <PasswordResetConfirmPage />
-                                </PublicRoute>
-                            }
-                        />
-                    </Routes>
-                </Container>
-                <Footer />
+                            <Route
+                                path="/posts/:id/edit"
+                                element={
+                                    <ProtectedRoute>
+                                        <AuthorRoute>
+                                            <PostEditPage />
+                                        </AuthorRoute>
+                                    </ProtectedRoute>
+                                }
+                            />
+
+                            <Route
+                                path="/users/:id/edit"
+                                element={
+                                    <ProtectedRoute>
+                                        <ProfileOwnerRoute>
+                                            <UserEditPage />
+                                        </ProfileOwnerRoute>
+                                    </ProtectedRoute>
+                                }
+                            />
+
+                            <Route path="*" element={<NotFoundPage />} />
+                        </Routes>
+                    </Container>
+                    <Footer />
+                </Box>
             </Router>
         </AuthProvider>
     );
