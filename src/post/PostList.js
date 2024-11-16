@@ -2,12 +2,12 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Box, Pagination, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import PostItem from './PostItem';
-import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import Grid from "@mui/material/Grid2";
 import {useSelector} from "react-redux";
 
 function PostList() {
-    const { authToken, user } = useSelector((state) => state.user);
+    const { authToken } = useSelector((state) => state.user);
     const [posts, setPosts] = useState([]);
     const [pagination, setPagination] = useState(null);
     const [loading, setLoading] = useState(true);

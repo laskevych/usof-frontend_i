@@ -7,7 +7,7 @@ import { AuthContext } from './AuthContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
-    minHeight: '100vh',
+    minHeight: '50vh',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.palette.background.default,
@@ -32,7 +32,6 @@ function PasswordResetConfirmPage() {
     const [message, setMessage] = useState('');
     const { authToken } = useContext(AuthContext);
 
-    // Якщо користувач авторизований, перенаправляємо на головну сторінку
     if (authToken) {
         return <Navigate to="/" />;
     }
@@ -60,7 +59,6 @@ function PasswordResetConfirmPage() {
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                // Обробка помилок валідації
                 const validationErrors = error.response.data.validationErrors;
                 const newErrors = {};
 
@@ -73,7 +71,6 @@ function PasswordResetConfirmPage() {
 
                 setErrors(newErrors);
             } else {
-                // Інші помилки
                 setMessage('An error occurred. Please try again.');
             }
         }

@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Avatar, Box, Card, CardContent, Chip, CircularProgress, IconButton, Tooltip, Typography} from '@mui/material';
 import axios from 'axios';
-import {Link as RouterLink, useLocation, useNavigate, useParams} from 'react-router-dom';
+import {Link as RouterLink, useParams} from 'react-router-dom';
 import Grid from "@mui/material/Grid2";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -14,7 +14,7 @@ import {useSelector} from "react-redux";
 import { Link } from '@mui/material';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import CommentsBlock from "./CommentsBlock";
+import CommentsBlock from "../comment/CommentsBlock";
 
 const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
@@ -306,8 +306,8 @@ function PostPage() {
                                         textDecoration: 'none'
                                     }}
                                 >
-                                    <AdminPanelSettingsIcon sx={{ mr: 1 }} />
-                                    <Typography variant="body2">Edit in Admin Panel</Typography>
+                                    <AdminPanelSettingsIcon sx={{ mr: 1 }} color="secondary" />
+                                    <Typography variant="body2" color="secondary">Edit in Admin Panel</Typography>
                                 </Link>
                             )}
                         </Box>

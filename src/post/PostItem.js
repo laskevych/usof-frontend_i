@@ -4,7 +4,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import MapsUgcOutlinedIcon from "@mui/icons-material/MapsUgcOutlined";
 import {styled} from "@mui/material/styles";
-import { useSelector } from 'react-redux';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -41,8 +40,6 @@ function formatTimestamp(timestamp) {
 }
 
 function PostItem({ post }) {
-    const { user } = useSelector((state) => state.user);
-
     return  (
         <StyledCard
             variant="outlined"

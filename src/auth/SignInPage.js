@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import {Container, TextField, Button, Typography, Link, Box, Grid2 as Grid} from '@mui/material';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import { setUser } from '../store/userSlice';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
-    minHeight: '100vh',
+    minHeight: '50vh',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.palette.background.default,
@@ -33,11 +33,6 @@ function SignInPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // Якщо користувач вже авторизований, перенаправляємо на головну сторінку
-    // if (authToken) {
-    //     return <Navigate to="/" />;
-    // }
-
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -45,7 +40,6 @@ function SignInPage() {
         });
     };
 
-    // Обробка відправки форми
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});

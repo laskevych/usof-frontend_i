@@ -18,26 +18,25 @@ function Filters() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const fetchCategories = async () => {
-        try {
-            const response = await axios.get('http://localhost:8080/api/categories/');
-            setCategories(response.data.data);
-        } catch (error) {
-            console.error('Error fetching categories:', error);
-        }
-    };
-
     useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/categories/');
+                setCategories(response.data.data);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+
         fetchCategories();
 
-        // Ініціалізуємо фільтри з URL
         const queryParams = new URLSearchParams(location.search);
         setStatus(queryParams.get('status') || '');
         setSelectedCategories(queryParams.get('categories') ? queryParams.get('categories').split(',') : []);
         setCreationAtStart(queryParams.get('creationAtStart') || '');
         setCreationAtEnd(queryParams.get('creationAtEnd') || '');
         setSortBy(queryParams.get('sortBy') || '');
-    }, []);
+    }, [location]);
 
     const handleFilterApply = () => {
         const queryParams = new URLSearchParams();

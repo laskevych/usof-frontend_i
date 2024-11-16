@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {Box, Pagination, CircularProgress, Chip} from '@mui/material';
 import axios from 'axios';
-import PostItem from './PostItem';
+import PostItem from '../post/PostItem';
 import { useLocation, useNavigate, useParams} from 'react-router-dom';
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
@@ -77,7 +77,7 @@ function CategoryPage() {
                 {user?.role === 'admin' && (
                     <Chip
                         icon={<AdminPanelSettingsIcon />}
-                        color="primary"
+                        color="secondary"
                         variant="outlined"
                         label="Edit in Admin Panel"
                         sx={{

@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
-    minHeight: '100vh',
+    minHeight: '50vh',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.palette.background.default,

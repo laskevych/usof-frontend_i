@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Box, Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import { useNavigate} from "react-router-dom";
 
 function PostForm({ post, onSubmit, onDelete }) {
     const navigate = useNavigate();
-    const { authToken } = useSelector((state) => state.user);
     const [title, setTitle] = useState(post?.title || '');
     const [content, setContent] = useState(post?.content || '');
     const [status, setStatus] = useState(post?.status || 'active');

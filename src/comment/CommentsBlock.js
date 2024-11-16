@@ -244,7 +244,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     {(user?.role === 'admin') && (
                         <Button
                             size="small"
-                            color="default"
+                            color="secondary"
                             startIcon={<AdminPanelSettingsIcon />}
                             href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`}
                             component="a"
@@ -309,7 +309,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
 };
 
 function CommentsBlock({ post }) {
-    const { authToken, user } = useSelector(state => state.user);
+    const { authToken } = useSelector(state => state.user);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
 

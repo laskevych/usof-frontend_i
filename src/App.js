@@ -3,24 +3,24 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignInPage from './auth/SignInPage';
 import SignUpPage from './auth/SignUpPage';
 import ConfirmEmailPage from './auth/ConfirmEmailPage';
-import HomePage from './HomePage';
+import MainPage from './main/MainPage';
 import { AuthProvider } from './auth/AuthContext';
 import PasswordResetRequestPage from "./auth/PasswordResetRequestPage";
 import PasswordResetConfirmPage from "./auth/PasswordResetConfirmPage";
-import Footer from "./Footer";
-import Header from "./Header";
+import Footer from "./main/Footer";
+import Header from "./main/Header";
 import {Box, Container} from "@mui/material";
-import PostPage from "./PostPage";
-import CategoryPage from "./CategoryPage";
-import PostEditPage from "./PostEditPage";
-import PostCreatePage from "./PostCreatePage";
-import UserProfilePage from "./UserProfilePage";
-import UserEditPage from "./UserEditPage";
-import ProtectedRoute from './auth/ProtectedRoute';
-import AuthorRoute from './auth/AuthorRoute';
-import ProfileOwnerRoute from './auth/ProfileOwnerRoute';
-import GuestRoute from "./auth/GuestRoute";
-import NotFoundPage from './NotFoundPage';
+import PostPage from "./post/PostPage";
+import CategoryPage from "./category/CategoryPage";
+import PostEditPage from "./post/PostEditPage";
+import PostCreatePage from "./post/PostCreatePage";
+import UserProfilePage from "./user/UserProfilePage";
+import UserEditPage from "./user/UserEditPage";
+import ProtectedRoute from './route/ProtectedRoute';
+import AuthorRoute from './route/AuthorRoute';
+import ProfileOwnerRoute from './route/ProfileOwnerRoute';
+import GuestRoute from "./route/GuestRoute";
+import NotFoundPage from './route/NotFoundPage';
 
 function App() {
     return (
@@ -81,7 +81,7 @@ function App() {
                                 }
                             />
 
-                            <Route path="/" element={<HomePage />} />
+                            <Route path="/" element={<MainPage />} />
                             <Route path="/posts/:id" element={<PostPage />} />
                             <Route path="/categories/:id/posts" element={<CategoryPage />} />
                             <Route path="/users/:id" element={<UserProfilePage />} />

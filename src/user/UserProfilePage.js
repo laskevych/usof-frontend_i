@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import {Box, Avatar, Typography, Button, Card, CircularProgress, Chip, Badge} from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import ArticleIcon from '@mui/icons-material/Article';
 import Grid from "@mui/material/Grid2";
 import Tooltip from '@mui/material/Tooltip';
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
-import PostItem from "./PostItem";
+import PostItem from "../post/PostItem";
 import PersonIcon from '@mui/icons-material/Person';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -27,28 +27,6 @@ function UserProfilePage() {
         setTabValue(newValue);
     };
 
-    const fetchFavoritePosts = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/users/${id}/favorite/`, {
-                headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
-            });
-            setFavoritePosts(response.data.data);
-        } catch (error) {
-            console.error('Error fetching posts:', error);
-        }
-    };
-
-    const fetchUserPosts = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/users/${id}/posts/`, {
-                headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
-            });
-            setUserPosts(response.data.data);
-        } catch (error) {
-            console.error('Error fetching posts:', error);
-        }
-    };
-
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -61,6 +39,29 @@ function UserProfilePage() {
             }
             setLoading(false);
         };
+
+        const fetchFavoritePosts = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/users/${id}/favorite/`, {
+                    headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                });
+                setFavoritePosts(response.data.data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        const fetchUserPosts = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/users/${id}/posts/`, {
+                    headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                });
+                setUserPosts(response.data.data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
         fetchUserData();
         fetchFavoritePosts();
         fetchUserPosts();
@@ -137,7 +138,7 @@ function UserProfilePage() {
                         <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
                             <Chip
                                 icon={<AdminPanelSettingsIcon />}
-                                color="primary"
+                                color="secondary"
                                 variant="outlined"
                                 label="Edit in Admin Panel"
                                 sx={{

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Box, TextField, Button, Typography, Avatar, IconButton } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { setUser } from './store/userSlice';
+import { setUser } from '../store/userSlice';
 
 function UserEditPage() {
     const { id } = useParams();

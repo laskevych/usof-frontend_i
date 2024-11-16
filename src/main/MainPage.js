@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import PostList from './PostList';
+import PostList from '../post/PostList';
 import Grid from "@mui/material/Grid2";
 import {Box, Chip} from "@mui/material";
 import Filters from "./Filters";
@@ -53,7 +53,7 @@ const HomePagePostItem = ({post}) => {
 };
 
 
-function HomePage() {
+function MainPage() {
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
@@ -115,4 +115,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default MainPage;

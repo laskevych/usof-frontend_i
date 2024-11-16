@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
     AppBar,
     Toolbar,
@@ -17,7 +17,7 @@ import {styled} from "@mui/material/styles";
 import { useDispatch, useSelector } from 'react-redux';
 import Typography from "@mui/material/Typography";
 import LogoutIcon from '@mui/icons-material/Logout';
-import { logout } from './store/userSlice';
+import { logout } from '../store/userSlice';
 import WbCloudyIcon from '@mui/icons-material/WbCloudy';
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
