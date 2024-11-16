@@ -11,7 +11,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: 0,
-    height: '100%',
     backgroundColor: (theme.vars || theme).palette.background.paper,
     textDecoration: 'none',
 }));
@@ -48,7 +47,7 @@ function PostItem({ post }) {
         <StyledCard
             variant="outlined"
             tabIndex={0}
-            sx={{ height: '100%', opacity: post.status === 'inactive' ? 0.5 : 1}}
+            sx={{opacity: post.status === 'inactive' ? 0.5 : 1}}
         >
             <Box
                 sx={{
@@ -96,7 +95,6 @@ function PostItem({ post }) {
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    height: '100%',
                     pb: 0
                 }}
                 component={RouterLink}

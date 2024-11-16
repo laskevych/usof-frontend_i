@@ -14,12 +14,12 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {styled} from "@mui/material/styles";
-import Sitemark from './SitemarkIcon';
 import { useDispatch, useSelector } from 'react-redux';
 import Typography from "@mui/material/Typography";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from './store/userSlice';
 import WbCloudyIcon from '@mui/icons-material/WbCloudy';
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 function Header() {
     const { authToken, user } = useSelector((state) => state.user);
@@ -68,14 +68,13 @@ function Header() {
             <Container maxWidth="lg">
                 <StyledToolbar variant="dense" disableGutters>
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-                        {/*<Sitemark />*/}
                         <WbCloudyIcon color="primary" fontSize="large"/>
                         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                             <Button variant="text" color="info" size="small" component={RouterLink} to={`/`}>
-                                Posts
+                                Tech_Cloud
                             </Button>
                             {authToken && user?.role === 'admin' && (
-                                <Button variant="text" color="info" size="small" href="http://localhost:8080/admin" target="_blank">
+                                <Button variant="text" color="secondary" size="large" href="http://localhost:8080/admin" target="_blank" startIcon={<AdminPanelSettingsIcon fontSize="large" color="secondary"/>}>
                                     Admin Panel
                                 </Button>
                             )}

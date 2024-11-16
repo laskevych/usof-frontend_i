@@ -89,7 +89,7 @@ function PasswordResetConfirmPage() {
                 {message === 'success' && (
                     <Typography variant="body1" align="center" color="success.main" gutterBottom>
                         Your password has been changed. You can{' '}
-                        <Link href="/login">
+                        <Link href="/sign-in/">
                             log in
                         </Link>
                         .
