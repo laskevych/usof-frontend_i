@@ -117,8 +117,7 @@ function PostItem({ post }) {
                                 to={`/categories/${category.id}/posts`}
                                 clickable
                                 sx={{ mr: 1, mb: 1 }}
-                                size="small"
-                                color="primary"
+                                color="default"
                                 variant="outlined"
                             />
                         ))}
