@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import {Avatar, Box, Card, CardContent, Chip, CircularProgress, IconButton, Tooltip, Typography} from '@mui/material';
+import {
+    Avatar,
+    AvatarGroup,
+    Box,
+    Card,
+    CardContent,
+    Chip,
+    CircularProgress,
+    IconButton,
+    Tooltip,
+    Typography
+} from '@mui/material';
 import axios from 'axios';
 import {Link as RouterLink, useParams} from 'react-router-dom';
 import Grid from "@mui/material/Grid2";
@@ -15,6 +26,7 @@ import { Link } from '@mui/material';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import CommentsBlock from "../comment/CommentsBlock";
+import PostItem from "./PostItem";
 
 const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
@@ -249,14 +261,33 @@ function PostPage() {
                             padding: '16px',
                         }}
                     >
-                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton
                                 onClick={handleLike}
                                 disabled={!authToken}
                             >
                                 {userHasLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon />}
                             </IconButton>
-                            <Typography>{likes.filter(like => like.type === 'like').length}</Typography>
+                            <AvatarGroup total={likes.filter(like => like.type === 'like').length} spacing="medium" max="3" sx={{
+                                '& .MuiAvatar-root': {
+                                    width: 24,
+                                    height: 24,
+                                    fontSize: '0.8rem'
+                                }
+                            }}>
+                                {likes
+                                    .filter(like => like.type === 'like')
+                                    .sort((a, b) => b.id - a.id)
+                                    .map((like) => (
+                                        <Avatar
+                                            key={like.id}
+                                            alt={like.author.login}
+                                            src={`http://localhost:8080/profile-pictures/${like.author.profilePicture}`}
+                                            sx={{ width: 24, height: 24 }}
+                                        />
+                                    ))
+                                }
+                            </AvatarGroup>
 
                             <IconButton
                                 onClick={handleDislike}
@@ -264,7 +295,26 @@ function PostPage() {
                             >
                                 {userHasDisliked ? <ThumbDownIcon color="error" /> : <ThumbDownOffAltIcon />}
                             </IconButton>
-                            <Typography>{likes.filter(like => like.type === 'dislike').length}</Typography>
+                            <AvatarGroup total={likes.filter(like => like.type === 'dislike').length} spacing="medium" max="3" sx={{
+                                '& .MuiAvatar-root': {
+                                    width: 24,
+                                    height: 24,
+                                    fontSize: '0.8rem'
+                                }
+                            }}>
+                                {likes
+                                    .filter(like => like.type === 'dislike')
+                                    .sort((a, b) => b.id - a.id)
+                                    .map((like) => (
+                                        <Avatar
+                                            key={like.id}
+                                            alt={like.author.login}
+                                            src={`http://localhost:8080/profile-pictures/${like.author.profilePicture}`}
+                                            sx={{ width: 24, height: 24 }}
+                                        />
+                                    ))
+                                }
+                            </AvatarGroup>
 
                             {user && (
                                 <Tooltip title="Save" placement="top">

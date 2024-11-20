@@ -55,7 +55,6 @@ function CategoryPage() {
     const handlePageChange = (event, value) => {
         const queryParams = new URLSearchParams(location.search);
         queryParams.set('page', value);
-        console.log(`${location.pathname}?${queryParams.toString()}`);
         navigate(`${location.pathname}?${queryParams.toString()}`);
     };
 

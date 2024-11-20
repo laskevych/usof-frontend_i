@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Box, Avatar, Typography, IconButton, TextField, Button, Tooltip} from '@mui/material';
+import {Box, Avatar, Typography, IconButton, TextField, Button, Tooltip, AvatarGroup} from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
@@ -202,7 +202,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     justifyContent: 'space-between'
                 }}
             >
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <IconButton
                         onClick={handleLike}
                         disabled={!authToken}
@@ -210,7 +210,26 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     >
                         {userHasLiked ? <ThumbUpIcon color="primary"/> : <ThumbUpOutlinedIcon />}
                     </IconButton>
-                    <Typography variant="caption">{likes.filter(like => like.type === 'like').length}</Typography>
+                    <AvatarGroup total={likes.filter(like => like.type === 'like').length} spacing="medium" max="3" sx={{
+                        '& .MuiAvatar-root': {
+                            width: 24,
+                            height: 24,
+                            fontSize: '0.8rem'
+                        }
+                    }}>
+                        {likes
+                            .filter(like => like.type === 'like')
+                            .sort((a, b) => b.id - a.id)
+                            .map((like) => (
+                                <Avatar
+                                    key={like.id}
+                                    alt={like.author.login}
+                                    src={`http://localhost:8080/profile-pictures/${like.author.profilePicture}`}
+                                    sx={{ width: 24, height: 24 }}
+                                />
+                            ))
+                        }
+                    </AvatarGroup>
 
                     <IconButton
                         onClick={handleDislike}
@@ -218,7 +237,26 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     >
                         {userHasDisliked ? <ThumbDownIcon color="error" /> : <ThumbDownOffAltIcon />}
                     </IconButton>
-                    <Typography variant="caption">{likes.filter(like => like.type === 'dislike').length}</Typography>
+                    <AvatarGroup total={likes.filter(like => like.type === 'dislike').length} spacing="medium" max="3" sx={{
+                        '& .MuiAvatar-root': {
+                            width: 24,
+                            height: 24,
+                            fontSize: '0.8rem'
+                        }
+                    }}>
+                        {likes
+                            .filter(like => like.type === 'dislike')
+                            .sort((a, b) => b.id - a.id)
+                            .map((like) => (
+                                <Avatar
+                                    key={like.id}
+                                    alt={like.author.login}
+                                    src={`http://localhost:8080/profile-pictures/${like.author.profilePicture}`}
+                                    sx={{ width: 24, height: 24 }}
+                                />
+                            ))
+                        }
+                    </AvatarGroup>
 
                     {userCanSetHelpful ?
                         <Button onClick={handleHelpful} size="small" color="warning" startIcon={<EmojiEventsOutlinedIcon />}>
@@ -234,27 +272,13 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                             </Tooltip>
                         )
                     }
-
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     {authToken && level < 2 && (
                         <Button onClick={() => setShowReplyForm(!showReplyForm)} size="small" startIcon={<ReplyIcon />}>
                             Reply
                         </Button>
                     )}
-
-                    {(user?.role === 'admin') && (
-                        <Button
-                            size="small"
-                            color="secondary"
-                            startIcon={<AdminPanelSettingsIcon />}
-                            href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`}
-                            component="a"
-                            clickable
-                            target="_blank"
-                        >
-                            Edit in Admin Panel
-                        </Button>
-                    )}
-
                     {(user?.id === comment.author.id && !editMode && comment.status === 'active') && (
                         <Button onClick={() => setEditMode(!editMode)} size="small" color="default" startIcon={<EditIcon />}>
                             Edit
@@ -276,6 +300,20 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     {user?.id === comment.author.id && (
                         <Button onClick={handleDelete} size="small" color="error" startIcon={<DeleteIcon />}>
                             Delete
+                        </Button>
+                    )}
+
+                    {(user?.role === 'admin') && (
+                        <Button
+                            size="small"
+                            color="secondary"
+                            startIcon={<AdminPanelSettingsIcon />}
+                            href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`}
+                            component="a"
+                            clickable
+                            target="_blank"
+                        >
+                            Edit in Admin Panel
                         </Button>
                     )}
                 </Box>
