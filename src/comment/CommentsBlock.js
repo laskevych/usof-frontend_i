@@ -257,64 +257,76 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                             ))
                         }
                     </AvatarGroup>
-
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     {userCanSetHelpful ?
-                        <Button onClick={handleHelpful} size="small" color="warning" startIcon={<EmojiEventsOutlinedIcon />}>
-                            Helpful
-                        </Button>
+                        <Tooltip title="Helpful" placement="top">
+                            <Button onClick={handleHelpful} size="small" color="warning">
+                                <EmojiEventsOutlinedIcon />
+                            </Button>
+                        </Tooltip>
                         : (comment.isHelpful || comment.isHelpful === 1) && (
-                            <Tooltip title="Helpful" placement="top">
+                        <Tooltip title="Helpful" placement="top">
                                 <span>
                                     <IconButton disabled size="small">
                                         {comment.isHelpful ? <EmojiEventsIcon color="warning" /> : <EmojiEventsOutlinedIcon />}
                                     </IconButton>
                                 </span>
-                            </Tooltip>
-                        )
+                        </Tooltip>
+                    )
                     }
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     {authToken && level < 2 && (
-                        <Button onClick={() => setShowReplyForm(!showReplyForm)} size="small" startIcon={<ReplyIcon />}>
-                            Reply
-                        </Button>
+                        <Tooltip title="Reply" placement="top">
+                            <Button onClick={() => setShowReplyForm(!showReplyForm)} size="small">
+                                <ReplyIcon />
+                            </Button>
+                        </Tooltip>
                     )}
                     {(user?.id === comment.author.id && !editMode && comment.status === 'active') && (
-                        <Button onClick={() => setEditMode(!editMode)} size="small" color="default" startIcon={<EditIcon />}>
-                            Edit
-                        </Button>
+                        <Tooltip title="Edit" placement="top">
+                            <Button onClick={() => setEditMode(!editMode)} size="small" color="default">
+                                <EditIcon />
+                            </Button>
+                        </Tooltip>
                     )}
 
                     {(user?.id === comment.author.id && editMode) && (
-                        <Button onClick={handleSave} size="small" color="success" startIcon={<SaveIcon />}>
-                            Save
-                        </Button>
+                        <Tooltip title="Save" placement="top">
+                            <Button onClick={handleSave} size="small" color="success">
+                                <SaveIcon />
+                            </Button>
+                        </Tooltip>
                     )}
 
                     {(user?.id === comment.author.id && comment.status === 'active') && (
-                        <Button onClick={handleDisable} size="small" color="secondary" startIcon={<VisibilityOffIcon />}>
-                            Disable
-                        </Button>
+                        <Tooltip title="Disable" placement="top">
+                            <Button onClick={handleDisable} size="small" color="secondary">
+                                <VisibilityOffIcon />
+                            </Button>
+                        </Tooltip>
                     )}
 
                     {user?.id === comment.author.id && (
-                        <Button onClick={handleDelete} size="small" color="error" startIcon={<DeleteIcon />}>
-                            Delete
-                        </Button>
+                        <Tooltip title="Delete" placement="top">
+                            <Button onClick={handleDelete} size="small" color="error">
+                                <DeleteIcon />
+                            </Button>
+                        </Tooltip>
                     )}
 
                     {(user?.role === 'admin') && (
-                        <Button
-                            size="small"
-                            color="secondary"
-                            startIcon={<AdminPanelSettingsIcon />}
-                            href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`}
-                            component="a"
-                            clickable
-                            target="_blank"
-                        >
-                            Edit in Admin Panel
-                        </Button>
+                        <Tooltip title="Edit in Admin Panel" placement="top">
+                            <Button
+                                size="small"
+                                color="secondary"
+                                href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`}
+                                component="a"
+                                clickable
+                                target="_blank"
+                            >
+                                <AdminPanelSettingsIcon />
+                            </Button>
+                        </Tooltip>
                     )}
                 </Box>
             </Box>

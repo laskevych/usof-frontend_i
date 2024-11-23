@@ -114,9 +114,6 @@ function UserProfilePage() {
                     <Typography variant="h5" sx={{ mt: 2 }}>
                         {userData.fullName}
                     </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                        {userData.login}
-                    </Typography>
                     <Typography variant="body2" color="textSecondary">
                         {userData.email}
                     </Typography>

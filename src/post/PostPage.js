@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Avatar,
     AvatarGroup,
-    Box,
+    Box, Button,
     Card,
     CardContent,
     Chip,
@@ -316,6 +316,8 @@ function PostPage() {
                                 }
                             </AvatarGroup>
 
+                        </Box>
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                             {user && (
                                 <Tooltip title="Save" placement="top">
                                     <IconButton onClick={handleFavorite} disabled={!authToken}>
@@ -323,41 +325,33 @@ function PostPage() {
                                     </IconButton>
                                 </Tooltip>
                             )}
-                        </Box>
-                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                             {user?.id === post.author.id && (
-                                <Link
-                                    component={RouterLink}
-                                    to={`/posts/${post.id}/edit/`}
-                                    underline="none"
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        color: 'primary.main',
-                                        textDecoration: 'none'
-                                    }}
-                                >
-                                    <EditIcon sx={{ mr: 1 }} />
-                                    <Typography variant="body2">Edit</Typography>
-                                </Link>
-
+                                <Tooltip title="Edit" placement="top">
+                                    <Button
+                                        size="small"
+                                        color="default"
+                                        component={RouterLink}
+                                        to={`/posts/${post.id}/edit/`}
+                                        underline="none"
+                                    >
+                                        <EditIcon />
+                                    </Button>
+                                </Tooltip>
                             )}
 
                             {user?.role === 'admin' && (
-                                <Link
-                                    href={`http://localhost:8080/admin/resources/posts/records/${post.id}/show`}
-                                    target="_blank"
-                                    underline="none"
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        color: 'primary.main',
-                                        textDecoration: 'none'
-                                    }}
-                                >
-                                    <AdminPanelSettingsIcon sx={{ mr: 1 }} color="secondary" />
-                                    <Typography variant="body2" color="secondary">Edit in Admin Panel</Typography>
-                                </Link>
+                                <Tooltip title="Edit in Admin Panel" placement="top">
+                                    <Button
+                                        size="small"
+                                        color="secondary"
+                                        href={`http://localhost:8080/admin/resources/posts/records/${post.id}/show`}
+                                        component="a"
+                                        clickable
+                                        target="_blank"
+                                    >
+                                        <AdminPanelSettingsIcon />
+                                    </Button>
+                                </Tooltip>
                             )}
                         </Box>
                     </Box>
