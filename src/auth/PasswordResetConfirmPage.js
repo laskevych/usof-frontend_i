@@ -87,7 +87,7 @@ function PasswordResetConfirmPage() {
                     <Typography variant="body1" align="center" color="success.main" gutterBottom>
                         Your password has been changed. You can{' '}
                         <Link href="/sign-in/">
-                            log in
+                            sign in
                         </Link>
                         .
                     </Typography>

@@ -119,18 +119,25 @@ function UserEditPage() {
             <Typography variant="h5" gutterBottom align="center">
                 Edit Profile
             </Typography>
-            <Avatar
-                src={`http://localhost:8080/profile-pictures/${userData.profilePicture}`}
-                alt={userData.fullName || userData.login}
-                sx={{ width: 250, height: 250, mt: 2 }}
-            />
-            <IconButton component="label" sx={{ mt: 2 }}>
-                <input type="file" hidden onChange={handleAvatarChange} />
-                <Typography>Upload New Avatar</Typography>
-            </IconButton>
-            <Button onClick={handleAvatarSubmit} variant="contained" sx={{ mt: 2 }}>
-                Save Avatar
-            </Button>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <Avatar
+                    src={`http://localhost:8080/profile-pictures/${userData.profilePicture}`}
+                    alt={userData.fullName || userData.login}
+                    sx={{ width: 250, height: 250, mt: 2 }}
+                />
+                <IconButton component="label" sx={{ mt: 1 }}>
+                    <input type="file" hidden onChange={handleAvatarChange} />
+                    <Typography>Upload New Avatar</Typography>
+                </IconButton>
+                <Button onClick={handleAvatarSubmit} variant="contained" sx={{ mt: 2 }}>
+                    Save Avatar
+                </Button>
+            </Box>
             <TextField
                 label="Full Name"
                 name="fullName"

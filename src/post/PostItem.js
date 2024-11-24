@@ -88,13 +88,6 @@ function PostItem({ post }) {
                             <MarkdownPreview source={post.content} />
                         </Box>
                     </Suspense>
-                    {/*<StyledTypography*/}
-                    {/*    variant="body2"*/}
-                    {/*    color="text.secondary"*/}
-                    {/*    gutterBottom*/}
-                    {/*>*/}
-                    {/*    {post.content.substring(0, 150)}...*/}
-                    {/*</StyledTypography>*/}
                     <Box sx={{ mt: 1 }}>
                         {post.categories.map((category) => (
                             <Chip
