@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { TextField, Button, Typography, Box, Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import axios from 'axios';
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+const MDEditor = lazy(() => import('@uiw/react-md-editor'));
 
 function PostForm({ post, onSubmit, onDelete }) {
     const navigate = useNavigate();
@@ -57,9 +58,9 @@ function PostForm({ post, onSubmit, onDelete }) {
     };
 
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', maxWidth: 500, mx: 'auto', mt: 4 }}>
-            <Typography variant="h5" gutterBottom>
-                {post ? 'Edit Post' : 'Create Post'}
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', mx: 'auto', mt: 4 }}>
+            <Typography variant="h5" gutterBottom sx={{textAlign: 'center'}}>
+                {post ? 'Edit Post' : 'New Post'}
             </Typography>
             <TextField
                 label="Title"
@@ -71,18 +72,19 @@ function PostForm({ post, onSubmit, onDelete }) {
                 error={!!errors.title}
                 helperText={errors.title}
             />
-            <TextField
-                label="Content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                fullWidth
-                margin="normal"
-                required
-                multiline
-                rows={6}
-                error={!!errors.content}
-                helperText={errors.content}
-            />
+            <Box sx={{ my: 2 }}>
+                <Suspense fallback={<div>Loading editor...</div>}>
+                    <Box data-color-mode="light">
+                        <Box className="wmde-markdown-var"> </Box>
+                        <MDEditor value={content} onChange={setContent} preview="edit" />
+                    </Box>
+                </Suspense>
+                {errors.content && (
+                    <Typography variant="caption" color="error">
+                        {errors.content}
+                    </Typography>
+                )}
+            </Box>
             <FormControl fullWidth margin="normal">
                 <InputLabel>Status</InputLabel>
                 <Select

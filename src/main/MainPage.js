@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PostList from '../post/PostList';
 import Grid from "@mui/material/Grid2";
-import {Accordion, AccordionDetails, AccordionSummary, Box, Chip, Typography} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Box, Button, Chip, Typography} from "@mui/material";
 import Filters from "./Filters";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -11,6 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import {Link as RouterLink} from "react-router-dom";
 import axios from "axios";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AddIcon from "@mui/icons-material/Add";
 
 
 const HomePagePostItem = ({post}) => {
@@ -106,14 +107,7 @@ function MainPage() {
                     </div>
                 </Grid>
             </Grid>
-            <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="filters-content" id="filters-header">
-                    <Typography>Filters</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <Filters />
-                </AccordionDetails>
-            </Accordion>
+            <Filters />
             <PostList/>
         </Box>
 

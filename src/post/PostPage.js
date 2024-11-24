@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import {
     Avatar,
     AvatarGroup,
@@ -26,6 +26,8 @@ import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import CommentsBlock from "../comment/CommentsBlock";
 
+const MarkdownPreview = lazy(() => import('@uiw/react-markdown-preview'));
+
 const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -41,13 +43,6 @@ const StyledCardContent = styled(CardContent)({
     gap: 4,
     padding: 16,
     flexGrow: 1
-});
-
-const StyledTypography = styled(Typography)({
-    display: '-webkit-box',
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
 });
 
 function formatTimestamp(timestamp) {
@@ -231,13 +226,12 @@ function PostPage() {
                             <Typography gutterBottom variant="h6" component="div">
                                 {post.title}
                             </Typography>
-                            <StyledTypography
-                                variant="body2"
-                                color="text.secondary"
-                                gutterBottom
-                            >
-                                {post.content}
-                            </StyledTypography>
+                            <Suspense fallback={<div>Loading content...</div>}>
+                                <Box data-color-mode="light">
+                                    <Box className="wmde-markdown-var"> </Box>
+                                    <MarkdownPreview source={post.content} />
+                                </Box>
+                            </Suspense>
                             <Box sx={{ mt: 1 }}>
                                 {post.categories.map((category) => (
                                     <Chip

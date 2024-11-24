@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import {Card, CardContent, Avatar, Typography, Chip, Box} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import MapsUgcOutlinedIcon from "@mui/icons-material/MapsUgcOutlined";
 import {styled} from "@mui/material/styles";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
+const MarkdownPreview = lazy(() => import('@uiw/react-markdown-preview'));
 
 const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
@@ -22,15 +24,6 @@ const StyledCardContent = styled(CardContent)({
     flexGrow: 1,
     textDecoration: 'none',
     color: 'black'
-});
-
-const StyledTypography = styled(Typography)({
-    display: '-webkit-box',
-    WebkitBoxOrient: 'vertical',
-    WebkitLineClamp: 2,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    textDecoration: 'none'
 });
 
 function formatTimestamp(timestamp) {
@@ -89,13 +82,19 @@ function PostItem({ post }) {
                     <Typography gutterBottom variant="h6" component="div">
                         {post.title}
                     </Typography>
-                    <StyledTypography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                    >
-                        {post.content.substring(0, 150)}...
-                    </StyledTypography>
+                    <Suspense fallback={<div>Loading content...</div>}>
+                        <Box data-color-mode="light">
+                            <Box className="wmde-markdown-var"> </Box>
+                            <MarkdownPreview source={post.content} />
+                        </Box>
+                    </Suspense>
+                    {/*<StyledTypography*/}
+                    {/*    variant="body2"*/}
+                    {/*    color="text.secondary"*/}
+                    {/*    gutterBottom*/}
+                    {/*>*/}
+                    {/*    {post.content.substring(0, 150)}...*/}
+                    {/*</StyledTypography>*/}
                     <Box sx={{ mt: 1 }}>
                         {post.categories.map((category) => (
                             <Chip

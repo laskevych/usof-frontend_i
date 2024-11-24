@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Box, FormControl, InputLabel, Select, MenuItem, Button, TextField, Checkbox, ListItemText, OutlinedInput } from '@mui/material';
+import {
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Button,
+    TextField,
+    Checkbox,
+    ListItemText,
+    OutlinedInput,
+    AccordionSummary, Typography, Accordion, AccordionDetails, Grid2 as Grid
+} from '@mui/material';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Grid from "@mui/material/Grid2";
-import AddIcon from '@mui/icons-material/Add';
-import { Link as RouterLink } from 'react-router-dom';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 
 
 function Filters() {
@@ -60,107 +72,127 @@ function Filters() {
     };
 
     return (
-        <Grid size={{ xs: 12, md: 12 }}>
-            <Box sx={{ mb: 2 }}>
-                <Button fullWidth variant="contained" startIcon={<AddIcon />}
-                        component={RouterLink}
-                        to="/posts/create">
-                    Create post
-                </Button>
-            </Box>
-            <Box sx={{ mb: 2 }}>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 2 }}>
-                    <FormControl size="small" fullWidth>
-                        <InputLabel>Status</InputLabel>
-                        <Select
-                            value={status}
-                            label="Status"
-                            onChange={(e) => setStatus(e.target.value)}
-                        >
-                            <MenuItem value="">Any</MenuItem>
-                            <MenuItem value="active">Active</MenuItem>
-                            <MenuItem value="inactive">Inactive</MenuItem>
-                        </Select>
-                    </FormControl>
+        <Accordion sx={{
+            border: '1px solid #e0e0e0',
+            borderRadius: '8px',
+            '&:before': { display: 'none' },
+            boxShadow: 'none',
+            width: '100%',
+            overflow: 'hidden',
+        }}>
+            <AccordionSummary sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                textAlign: 'center',
+            }} expandIcon={<ExpandMoreIcon/>} aria-controls="filters-content" id="filters-header">
+                <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1
+                }}>
+                    <FilterListIcon />
+                    <Typography variant="h6" sx={{ textAlign: 'center' }} align="center">
+                        Filters
+                    </Typography>
                 </Box>
+            </AccordionSummary>
+            <AccordionDetails>
+                <Grid size={{ xs: 12, md: 12 }}>
+                    <Box sx={{ mb: 2 }}>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 2 }}>
+                            <FormControl size="small" fullWidth>
+                                <InputLabel>Status</InputLabel>
+                                <Select
+                                    value={status}
+                                    label="Status"
+                                    onChange={(e) => setStatus(e.target.value)}
+                                >
+                                    <MenuItem value="">Any</MenuItem>
+                                    <MenuItem value="active">Active</MenuItem>
+                                    <MenuItem value="inactive">Inactive</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
 
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 2 }}>
-                    <FormControl size="small" fullWidth>
-                        <InputLabel>Categories</InputLabel>
-                        <Select
-                            multiple
-                            value={selectedCategories}
-                            onChange={(e) => setSelectedCategories(e.target.value)}
-                            input={<OutlinedInput label="Categories" />}
-                            renderValue={(selected) =>
-                                categories
-                                    .filter((cat) => selected.includes(String(cat.id)))
-                                    .map((cat) => cat.title)
-                                    .join(', ')
-                            }
-                        >
-                            {categories.map((category) => (
-                                <MenuItem key={category.id} value={String(category.id)}>
-                                    <Checkbox checked={selectedCategories.includes(String(category.id))} />
-                                    <ListItemText primary={category.title} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Box>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 2 }}>
+                            <FormControl size="small" fullWidth>
+                                <InputLabel>Categories</InputLabel>
+                                <Select
+                                    multiple
+                                    value={selectedCategories}
+                                    onChange={(e) => setSelectedCategories(e.target.value)}
+                                    input={<OutlinedInput label="Categories" />}
+                                    renderValue={(selected) =>
+                                        categories
+                                            .filter((cat) => selected.includes(String(cat.id)))
+                                            .map((cat) => cat.title)
+                                            .join(', ')
+                                    }
+                                >
+                                    {categories.map((category) => (
+                                        <MenuItem key={category.id} value={String(category.id)}>
+                                            <Checkbox checked={selectedCategories.includes(String(category.id))} />
+                                            <ListItemText primary={category.title} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Box>
 
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 2 }}>
-                    <FormControl size="small" fullWidth>
-                        <TextField
-                            label="Publish Date Start"
-                            type="date"
-                            value={creationAtStart}
-                            onChange={(e) => setCreationAtStart(e.target.value)}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                    </FormControl>
-                    <FormControl size="small" fullWidth>
-                        <TextField
-                            label="Publish Date End"
-                            type="date"
-                            value={creationAtEnd}
-                            onChange={(e) => setCreationAtEnd(e.target.value)}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                    </FormControl>
-                </Box>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 2 }}>
+                            <FormControl size="small" fullWidth>
+                                <TextField
+                                    label="Publish Date Start"
+                                    type="date"
+                                    value={creationAtStart}
+                                    onChange={(e) => setCreationAtStart(e.target.value)}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </FormControl>
+                            <FormControl size="small" fullWidth>
+                                <TextField
+                                    label="Publish Date End"
+                                    type="date"
+                                    value={creationAtEnd}
+                                    onChange={(e) => setCreationAtEnd(e.target.value)}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </FormControl>
+                        </Box>
 
-                <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                    <FormControl size="small" fullWidth>
-                        <InputLabel>Sort</InputLabel>
-                        <Select
-                            value={sortBy}
-                            label="Sort By"
-                            onChange={(e) => setSortBy(e.target.value)}
-                        >
-                            <MenuItem value="">None</MenuItem>
-                            <MenuItem value="creationAt-asc">Publish Date ↑</MenuItem>
-                            <MenuItem value="creationAt-desc">Publish Date ↓</MenuItem>
-                            <MenuItem value="likes-asc">Likes ↑</MenuItem>
-                            <MenuItem value="likes-desc">Likes ↓</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Box>
+                        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                            <FormControl size="small" fullWidth>
+                                <InputLabel>Sort</InputLabel>
+                                <Select
+                                    value={sortBy}
+                                    label="Sort By"
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                >
+                                    <MenuItem value="">None</MenuItem>
+                                    <MenuItem value="creationAt-asc">Publish Date ↑</MenuItem>
+                                    <MenuItem value="creationAt-desc">Publish Date ↓</MenuItem>
+                                    <MenuItem value="likes-asc">Likes ↑</MenuItem>
+                                    <MenuItem value="likes-desc">Likes ↓</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
 
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Button fullWidth variant="contained" onClick={handleFilterApply}>
-                        Apply
-                    </Button>
-                    <Button fullWidth variant="outlined" onClick={handleFilterReset}>
-                        Reset
-                    </Button>
-                </Box>
-            </Box>
-        </Grid>
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                            <Button fullWidth variant="contained" onClick={handleFilterApply} startIcon={<FilterListIcon/>}>
+                                Apply
+                            </Button>
+                            <Button fullWidth variant="outlined" onClick={handleFilterReset} startIcon={<FilterListOffIcon/>}>
+                                Reset
+                            </Button>
+                        </Box>
+                    </Box>
+                </Grid>
+            </AccordionDetails>
+        </Accordion>
     );
 }
 

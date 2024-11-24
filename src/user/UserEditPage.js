@@ -116,13 +116,13 @@ function UserEditPage() {
 
     return (
         <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 500, mx: 'auto', mt: 4 }}>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom align="center">
                 Edit Profile
             </Typography>
             <Avatar
                 src={`http://localhost:8080/profile-pictures/${userData.profilePicture}`}
                 alt={userData.fullName || userData.login}
-                sx={{ width: 100, height: 100, mt: 2 }}
+                sx={{ width: 250, height: 250, mt: 2 }}
             />
             <IconButton component="label" sx={{ mt: 2 }}>
                 <input type="file" hidden onChange={handleAvatarChange} />

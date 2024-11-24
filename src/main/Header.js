@@ -20,6 +20,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from '../store/userSlice';
 import WbCloudyIcon from '@mui/icons-material/WbCloudy';
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 function Header() {
     const { authToken, user } = useSelector((state) => state.user);
@@ -89,6 +90,13 @@ function Header() {
                     >
                     {authToken && user ? (
                         <>
+                            <Box sx={{ mr: 1}}>
+                                <Button size="small" fullWidth variant="outlined" startIcon={<DriveFileRenameOutlineIcon />}
+                                        component={RouterLink}
+                                        to="/posts/create">
+                                    Write
+                                </Button>
+                            </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'black' }}>
                                 <IconButton component={RouterLink} to={`/users/${user.id}`} sx={{ p: 0 }}>
                                     <Avatar alt={user.login} src={`http://localhost:8080/profile-pictures/${user.profilePicture}`} />
@@ -147,6 +155,10 @@ function Header() {
                                         <MenuItem component={RouterLink} to={`/users/${user.id}`} onClick={toggleDrawer(false)} sx={{color: "black"}}>
                                             <Avatar alt={user.login} src={`http://localhost:8080/profile-pictures/${user.profilePicture}`} sx={{ mr: 1 }} />
                                             {user.fullName || user.login}
+                                        </MenuItem>
+                                        <MenuItem component={RouterLink} to="/posts/create" sx={{color: "black"}}>
+                                            <DriveFileRenameOutlineIcon sx={{ mr: 1 }} />
+                                            Write a post
                                         </MenuItem>
                                         <MenuItem onClick={handleLogout} sx={{color: "black"}}>
                                             <LogoutIcon sx={{ mr: 1 }} />

@@ -115,7 +115,7 @@ function UserProfilePage() {
                     <Avatar
                         src={`http://localhost:8080/profile-pictures/${userData.profilePicture}`}
                         alt={userData.fullName || userData.login}
-                        sx={{ width: 150, height: 150, margin: '0 auto' }}
+                        sx={{ width: 200, height: 200, margin: '0 auto' }}
                     />
                     <Typography variant="h5" sx={{ mt: 2 }}>
                         {userData.fullName}
