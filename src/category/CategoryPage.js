@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {Box, Pagination, CircularProgress, Chip} from '@mui/material';
+import { Box, Pagination, CircularProgress, Chip } from '@mui/material';
 import axios from 'axios';
 import PostItem from '../post/PostItem';
 import { useLocation, useNavigate, useParams} from 'react-router-dom';
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 function CategoryPage() {
     const { id } = useParams();
@@ -27,7 +27,12 @@ function CategoryPage() {
             });
             setCategory(response.data.data);
         } catch (error) {
-            console.error('Error fetching posts:', error);
+            if (error.response && error.response.status === 404) {
+                navigate('/404');
+            } else {
+                console.error('Error fetching categories:', error);
+            }
+
         }
         setLoading(false);
     };

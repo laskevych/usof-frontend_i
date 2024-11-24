@@ -12,7 +12,7 @@ import {
     Typography
 } from '@mui/material';
 import axios from 'axios';
-import {Link as RouterLink, useParams} from 'react-router-dom';
+import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 import Grid from "@mui/material/Grid2";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -22,11 +22,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import {styled} from "@mui/material/styles";
 import {useSelector} from "react-redux";
-import { Link } from '@mui/material';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import CommentsBlock from "../comment/CommentsBlock";
-import PostItem from "./PostItem";
 
 const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
@@ -59,12 +57,14 @@ function formatTimestamp(timestamp) {
 }
 
 function PostPage() {
+    const navigate = useNavigate();
     const { id } = useParams();
     const { authToken, user } = useSelector((state) => state.user);
     const [post, setPost] = useState({});
     const [likes, setLikes] = useState([]);
     const [favoritePosts, setFavoritePosts] = useState([]);
     const [loading, setLoading] = useState(true);
+
 
     const fetchPost = async () => {
         setLoading(true);
@@ -74,7 +74,11 @@ function PostPage() {
             });
             setPost(response.data.data);
         } catch (error) {
-            console.error('Error fetching posts:', error);
+            if (error.response && error.response.status === 404) {
+                navigate('/404');
+            } else {
+                console.error('Error fetching posts:', error);
+            }
         }
         setLoading(false);
     };
@@ -191,6 +195,7 @@ function PostPage() {
                             flexDirection: 'row',
                             gap: 2,
                             alignItems: 'center',
+                            justifyContent: 'space-between',
                             padding: '16px',
                             textDecoration: 'none',
                             color: 'inherit'
@@ -211,7 +216,6 @@ function PostPage() {
                                 {post.author.fullName || post.author.login}
                             </Typography>
                         </Box>
-                        <Typography>•</Typography>
                         <Typography variant="caption">{formatTimestamp(post.creationAt)}</Typography>
                     </Box>
                     <StyledCardContent

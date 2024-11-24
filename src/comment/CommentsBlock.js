@@ -159,6 +159,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     flexDirection: 'row',
                     gap: 2,
                     alignItems: 'center',
+                    justifyContent: 'space-between',
                     mb: 2
                 }}
             >
@@ -177,7 +178,6 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                         {comment.author.fullName || comment.author.login}
                     </Typography>
                 </Box>
-                <Typography>•</Typography>
                 <Typography variant="caption">{formatTimestamp(comment.creationAt)}</Typography>
             </Box>
             {editMode ? (
@@ -300,7 +300,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
 
                     {(user?.id === comment.author.id && comment.status === 'active') && (
                         <Tooltip title="Disable" placement="top">
-                            <Button onClick={handleDisable} size="small" color="secondary">
+                            <Button onClick={handleDisable} size="small" color="default">
                                 <VisibilityOffIcon />
                             </Button>
                         </Tooltip>

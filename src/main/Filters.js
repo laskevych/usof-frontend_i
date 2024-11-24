@@ -112,7 +112,7 @@ function Filters() {
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 2 }}>
                     <FormControl size="small" fullWidth>
                         <TextField
-                            label="Creation Date Start"
+                            label="Publish Date Start"
                             type="date"
                             value={creationAtStart}
                             onChange={(e) => setCreationAtStart(e.target.value)}
@@ -123,7 +123,7 @@ function Filters() {
                     </FormControl>
                     <FormControl size="small" fullWidth>
                         <TextField
-                            label="Creation Date End"
+                            label="Publish Date End"
                             type="date"
                             value={creationAtEnd}
                             onChange={(e) => setCreationAtEnd(e.target.value)}
@@ -143,8 +143,8 @@ function Filters() {
                             onChange={(e) => setSortBy(e.target.value)}
                         >
                             <MenuItem value="">None</MenuItem>
-                            <MenuItem value="creationAt-asc">Creation Date ↑</MenuItem>
-                            <MenuItem value="creationAt-desc">Creation Date ↓</MenuItem>
+                            <MenuItem value="creationAt-asc">Publish Date ↑</MenuItem>
+                            <MenuItem value="creationAt-desc">Publish Date ↓</MenuItem>
                             <MenuItem value="likes-asc">Likes ↑</MenuItem>
                             <MenuItem value="likes-desc">Likes ↓</MenuItem>
                         </Select>

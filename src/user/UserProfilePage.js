@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import {useParams, Link as RouterLink, useNavigate} from 'react-router-dom';
 import {Box, Avatar, Typography, Button, Card, CircularProgress, Chip, Badge} from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -22,6 +22,7 @@ function UserProfilePage() {
     const [favoritePosts, setFavoritePosts] = useState([]);
     const [userPosts, setUserPosts] = useState([]);
     const [tabValue, setTabValue] = useState(0);
+    const navigate = useNavigate();
 
     const handleChangeTab = (event, newValue) => {
         setTabValue(newValue);
@@ -35,7 +36,12 @@ function UserProfilePage() {
                 });
                 setUserData(response.data.data);
             } catch (error) {
-                console.error('Error fetching user data:', error);
+                if (error.response && error.response.status === 404) {
+                    navigate('/404');
+                } else {
+                    console.error('Error fetching user data:', error);console.error('Error fetching posts:', error);
+                }
+
             }
             setLoading(false);
         };

@@ -58,34 +58,22 @@ function PostItem({ post }) {
                     color: 'inherit'
                 }}
             >
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 2,
-                    alignItems: 'center'
-                    }}
+                <Box
+                    sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
+                    component={RouterLink}
+                    to={`/users/${post.author.id}/`}
                 >
-                    <Box
-                        sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
-                        component={RouterLink}
-                        to={`/users/${post.author.id}/`}
-                    >
-                        <Avatar
-                            key={post.author.id}
-                            alt={post.author.login}
-                            src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
-                            sx={{ width: 36, height: 36 }}
-                        />
-                        <Typography variant="caption">
-                            {post.author.fullName || post.author.login}
-                        </Typography>
-                    </Box>
-                    <Typography>•</Typography>
-                    <Typography variant="caption">{formatTimestamp(post.creationAt)}</Typography>
+                    <Avatar
+                        key={post.author.id}
+                        alt={post.author.login}
+                        src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
+                        sx={{ width: 36, height: 36 }}
+                    />
+                    <Typography variant="caption">
+                        {post.author.fullName || post.author.login}
+                    </Typography>
                 </Box>
-                {post.status === 'inactive' && (
-                    <Chip label="Disabled" icon={<VisibilityOffIcon/>}></Chip>
-                )}
+                <Typography variant="caption">{formatTimestamp(post.creationAt)}</Typography>
             </Box>
             <StyledCardContent
                 sx={{
@@ -132,12 +120,16 @@ function PostItem({ post }) {
                     gap: 2,
                     alignItems: 'center',
                     padding: '16px',
+                    justifyContent: 'space-between'
                 }}
             >
                 <Chip icon={<ThumbUpOutlinedIcon />} color="default" variant="outlined" label={post.likes} sx={{
                     border: 'none',
                     boxShadow: 'none',
                 }} />
+                {post.status === 'inactive' && (
+                    <Chip label="Disabled" icon={<VisibilityOffIcon/>}></Chip>
+                )}
                 <Chip icon={<MapsUgcOutlinedIcon />} color="default" variant="outlined" label={post.numberOfComments} sx={{
                     border: 'none',
                     boxShadow: 'none',
