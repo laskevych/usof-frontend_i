@@ -60,7 +60,7 @@ function Filters() {
     };
 
     return (
-        <Grid size={{ xs: 12, md: 3 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ mb: 2 }}>
                 <Button fullWidth variant="contained" startIcon={<AddIcon />}
                         component={RouterLink}
