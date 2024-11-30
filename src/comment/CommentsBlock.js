@@ -23,7 +23,7 @@ function formatTimestamp(timestamp) {
         date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
-const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentInState, level }) => {
+const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentInState, removeCommentFromState, level }) => {
     const { authToken, user } = useSelector((state) => state.user);
     const [likes, setLikes] = useState([]);
     const [editMode, setEditMode] = useState(false);
@@ -357,7 +357,16 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
 
             {comment.comments?.map(reply => (
                 level < 2 && (
-                    <CommentItem key={reply.id} comment={reply} post={post} onCommentUpdate={onCommentUpdate} onDelete={onDelete} updateCommentInState={updateCommentInState} level={level+1} />
+                    <CommentItem
+                        key={reply.id}
+                        comment={reply}
+                        post={post}
+                        onCommentUpdate={onCommentUpdate}
+                        onDelete={() => removeCommentFromState(reply.id)}
+                        updateCommentInState={updateCommentInState}
+                        removeCommentFromState={removeCommentFromState}
+                        level={level + 1}
+                    />
                 )
             ))}
         </Box>
@@ -397,6 +406,19 @@ function CommentsBlock({ post }) {
         );
     };
 
+    const removeCommentFromState = (commentId) => {
+        const recursiveRemove = (commentsList) => {
+            return commentsList
+                .map(comment => ({
+                    ...comment,
+                    comments: recursiveRemove(comment.comments || []),
+                }))
+                .filter(comment => comment.id !== commentId);
+        };
+
+        setComments(prevComments => recursiveRemove(prevComments));
+    };
+
     const handleAddComment = async () => {
         if (!newComment.trim()) return;
         try {
@@ -411,7 +433,7 @@ function CommentsBlock({ post }) {
     };
 
     return (
-        <Box sx={{mt: 2}}>
+        <Box sx={{ mt: 2 }}>
             {authToken && (
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                     <TextField
@@ -421,7 +443,9 @@ function CommentsBlock({ post }) {
                         onChange={(e) => setNewComment(e.target.value)}
                         multiline
                     />
-                    <Button onClick={handleAddComment} variant="contained" color="primary" startIcon={<AddIcon />}>Comment</Button>
+                    <Button onClick={handleAddComment} variant="contained" color="primary" startIcon={<AddIcon />}>
+                        Comment
+                    </Button>
                 </Box>
             )}
             {comments.map(comment => (
@@ -430,8 +454,9 @@ function CommentsBlock({ post }) {
                     comment={comment}
                     post={post}
                     onCommentUpdate={() => setComments(prev => prev)}
-                    onDelete={() => setComments(prev => prev.filter(c => c.id !== comment.id))}
+                    onDelete={() => removeCommentFromState(comment.id)}
                     updateCommentInState={updateCommentInState}
+                    removeCommentFromState={removeCommentFromState}
                     level={1}
                 />
             ))}
