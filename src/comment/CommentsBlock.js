@@ -32,8 +32,8 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
     const userHasDisliked = likes.some(like => like.type === 'dislike' && like.author.id === user?.id);
     const userCanSetHelpful = !comment.isHelpful && post.author.id === user?.id;
 
-    const [showReplyForm, setShowReplyForm] = useState(false); // State для форми відповіді
-    const [replyContent, setReplyContent] = useState(''); // State для тексту відповіді
+    const [showReplyForm, setShowReplyForm] = useState(false);
+    const [replyContent, setReplyContent] = useState('');
 
     const fetchLikes = async () => {
         try {
@@ -152,7 +152,13 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
     };
 
     return (
-        <Box sx={{ border: '1px solid #ddd', p: 2, borderRadius: 1, mb: 2, opacity: comment.status === 'inactive' ? 0.5 : 1 }}>
+        <Box sx={{
+            border: comment.isHelpful ? '2px solid #ed6c02' : '1px solid #ddd',
+            p: 2,
+            borderRadius: 1,
+            mb: 2,
+            opacity: comment.status === 'inactive' ? 0.5 : 1
+        }}>
             <Box
                 sx={{
                     display: 'flex',
