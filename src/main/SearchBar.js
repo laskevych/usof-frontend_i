@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Box, TextField, InputAdornment, List, ListItem, ListItemText } from '@mui/material';
+import { Box, TextField, InputAdornment, List, ListItem, ListItemText, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -41,6 +41,24 @@ const SearchBar = () => {
         navigate(`/posts/${postId}`);
         setShowResults(false);
         setSearchQuery('');
+    };
+
+    const highlightText = (text, highlight) => {
+        const parts = text.split(new RegExp(`(${highlight})`, 'gi')); // Розбиваємо текст на частини
+        return parts.map((part, index) =>
+            part.toLowerCase() === highlight.toLowerCase() ? (
+                <Typography
+                    key={index}
+                    component="span"
+                    color="primary"
+                    fontWeight="bold"
+                >
+                    {part}
+                </Typography>
+            ) : (
+                part
+            )
+        );
     };
 
     return (
@@ -97,7 +115,9 @@ const SearchBar = () => {
                                     button
                                     onClick={() => handleResultClick(post.id)}
                                 >
-                                    <ListItemText primary={post.title} />
+                                    <ListItemText
+                                        primary={highlightText(post.title, searchQuery.trim())}
+                                    />
                                 </ListItem>
                             ))
                         ) : (
