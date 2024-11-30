@@ -20,7 +20,7 @@ const SearchBar = () => {
             searchPosts(trimmedQuery);
         } else {
             setShowResults(false);
-        }
+        }// eslint-disable-next-line
     }, []);
 
     const searchPosts = useCallback(async (query) => {

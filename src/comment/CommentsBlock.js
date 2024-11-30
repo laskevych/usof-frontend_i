@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {Box, Avatar, Typography, IconButton, TextField, Button, Tooltip, AvatarGroup} from '@mui/material';
+import {Box, Avatar, Typography, IconButton, TextField, Button, Tooltip, AvatarGroup, Menu, MenuItem, Divider, alpha} from '@mui/material';
 import axios from 'axios';
+import { styled } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import AddIcon from "@mui/icons-material/Add";
@@ -16,12 +17,56 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import ReplyIcon from '@mui/icons-material/Reply';
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ' +
         date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
+
+const StyledMenu = styled((props) => (
+    <Menu
+        elevation={0}
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+        }}
+        transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+        }}
+        {...props}
+    />
+))(({ theme }) => ({
+    '& .MuiPaper-root': {
+        borderRadius: 6,
+        marginTop: theme.spacing(1),
+        minWidth: 180,
+        color: 'rgb(55, 65, 81)',
+        boxShadow:
+            'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+        '& .MuiMenu-list': {
+            padding: '4px 0',
+        },
+        '& .MuiMenuItem-root': {
+            '& .MuiSvgIcon-root': {
+                fontSize: 18,
+                color: theme.palette.text.secondary,
+                marginRight: theme.spacing(1.5),
+            },
+            '&:active': {
+                backgroundColor: alpha(
+                    theme.palette.primary.main,
+                    theme.palette.action.selectedOpacity,
+                ),
+            },
+        },
+        ...theme.applyStyles('dark', {
+            color: theme.palette.grey[300],
+        }),
+    },
+}));
 
 const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentInState, removeCommentFromState, level }) => {
     const { authToken, user } = useSelector((state) => state.user);
@@ -34,6 +79,15 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
 
     const [showReplyForm, setShowReplyForm] = useState(false);
     const [replyContent, setReplyContent] = useState('');
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const fetchLikes = async () => {
         try {
@@ -105,6 +159,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             updateCommentInState(comment.id, { status: 'inactive' });
+            handleClose();
         } catch (error) {
             console.error('Error saving comment:', error);
         }
@@ -116,6 +171,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             onDelete();
+            handleClose();
         } catch (error) {
             console.error('Error deleting comment:', error);
         }
@@ -295,7 +351,6 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                             </Button>
                         </Tooltip>
                     )}
-
                     {(user?.id === comment.author.id && editMode) && (
                         <Tooltip title="Save" placement="top">
                             <Button onClick={handleSave} size="small" color="success">
@@ -304,35 +359,56 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                         </Tooltip>
                     )}
 
-                    {(user?.id === comment.author.id && comment.status === 'active') && (
-                        <Tooltip title="Disable" placement="top">
-                            <Button onClick={handleDisable} size="small" color="default">
-                                <VisibilityOffIcon />
-                            </Button>
-                        </Tooltip>
-                    )}
-
-                    {user?.id === comment.author.id && (
-                        <Tooltip title="Delete" placement="top">
-                            <Button onClick={handleDelete} size="small" color="error">
-                                <DeleteIcon />
-                            </Button>
-                        </Tooltip>
-                    )}
-
-                    {(user?.role === 'admin') && (
-                        <Tooltip title="Edit in Admin Panel" placement="top">
-                            <Button
-                                size="small"
-                                color="secondary"
-                                href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`}
-                                component="a"
-                                clickable
-                                target="_blank"
-                            >
-                                <AdminPanelSettingsIcon />
-                            </Button>
-                        </Tooltip>
+                    {( (user?.id === comment.author.id && !editMode && comment.status === 'active') || user?.role === 'admin' ) && (
+                        <>
+                            <div>
+                                <Tooltip title="More" placement="top">
+                                    <Button
+                                        size="small"
+                                        id="demo-customized-button"
+                                        aria-controls={open ? 'demo-customized-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                        disableElevation
+                                        onClick={handleClick}
+                                    >
+                                        <MoreVertIcon />
+                                    </Button>
+                                </Tooltip>
+                                <StyledMenu
+                                    id="demo-customized-menu"
+                                    MenuListProps={{
+                                        'aria-labelledby': 'demo-customized-button',
+                                    }}
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleClose}
+                                >
+                                    {(user?.id === comment.author.id && comment.status === 'active') && (
+                                    <MenuItem onClick={handleDisable} disableRipple>
+                                        <VisibilityOffIcon />
+                                        Disable
+                                    </MenuItem>
+                                    )}
+                                    {user?.id === comment.author.id && (
+                                        <MenuItem onClick={handleDelete} disableRipple>
+                                            <DeleteIcon/>
+                                            Delete
+                                        </MenuItem>
+                                    )}
+                                    {(user?.role === 'admin') && (
+                                        <>
+                                            <Divider sx={{ my: 0.5 }} />
+                                            <MenuItem component="a" disableRipple href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`} clickable
+                                                      target="_blank">
+                                                <AdminPanelSettingsIcon />
+                                                Edit in Admin Panel
+                                            </MenuItem>
+                                        </>
+                                    )}
+                                </StyledMenu>
+                            </div>
+                        </>
                     )}
                 </Box>
             </Box>
