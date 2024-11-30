@@ -9,7 +9,7 @@ import {
     Box,
     alpha,
     Drawer,
-    MenuItem, Divider
+    MenuItem
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -21,6 +21,8 @@ import { logout } from '../store/userSlice';
 import WbCloudyIcon from '@mui/icons-material/WbCloudy';
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import SearchBar from './SearchBar'; // Імпортуємо компонент пошуку
+
 
 function Header() {
     const { authToken, user } = useSelector((state) => state.user);
@@ -81,17 +83,21 @@ function Header() {
                             )}
                         </Box>
                     </Box>
+
+                    <SearchBar/>
+
                     <Box
                         sx={{
                             display: { xs: 'none', md: 'flex' },
                             gap: 1,
                             alignItems: 'center',
+                            ml: 1
                         }}
                     >
                     {authToken && user ? (
                         <>
                             <Box sx={{ mr: 1}}>
-                                <Button size="small" fullWidth variant="outlined" startIcon={<DriveFileRenameOutlineIcon />}
+                                <Button fullWidth variant="outlined" startIcon={<DriveFileRenameOutlineIcon />}
                                         component={RouterLink}
                                         to="/posts/create">
                                     Write
