@@ -70,7 +70,7 @@ function Header() {
                 <StyledToolbar variant="dense" disableGutters>
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
                         <WbCloudyIcon color="primary" fontSize="large"/>
-                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <Box sx={{ display: { xs: '12', md: 'flex' } }}>
                             <Button variant="text" color="info" size="small" component={RouterLink} to={`/`}>
                                 Tech_Cloud
                             </Button>
@@ -144,12 +144,9 @@ function Header() {
                                     <IconButton onClick={toggleDrawer(false)}>
                                     </IconButton>
                                 </Box>
-
-                                <MenuItem component={RouterLink} to={`/`}>Posts</MenuItem>
                                 {authToken && user?.role === 'admin' && (
                                     <MenuItem href="http://localhost:8080/admin" target="_blank">Admin Panel</MenuItem>
                                 )}
-                                <Divider sx={{ my: 3 }} />
                                 {authToken && user ? (
                                     <>
                                         <MenuItem component={RouterLink} to={`/users/${user.id}`} onClick={toggleDrawer(false)} sx={{color: "black"}}>
