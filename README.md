@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# Tech_Cloud
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Short Description
+This project is a backend API built with Express.js for a platform similar to Stack Overflow, named **Tech_Cloud**. 
+The API allows users to register, log in, post questions, add comments, like/dislike posts, and manage other interactions.
 
-## Available Scripts
+## Requirements and Dependencies
+- **Node.JS** >= v22
+- **NPM** >= v10
+- **MySQL** >= 8.0
 
-In the project directory, you can run:
+Before starting, ensure the required technologies are installed.
 
-### `npm start`
+## How to Run the Solution
+1. First you need to install back-end part. Clone this repository to your local machine and navigate to the project directory.
+   ```bash
+   git clone https://github.com/InessaRepeshko/tech-cloud-backend
+   ```
+2. You need to go to the folder with the back-end part and follow all the steps from [README.md](https://github.com/InessaRepeshko/tech-cloud-backend) there. After that, you should continue to follow the steps in this guide.
+3. Install React, Redux and other front-end parts.
+   ```bash
+   npm install
+   ```
+4. Run the server to start the application.
+   ```bash
+   npm run start
+   ```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Fake Data
+All users with role `user` has password: `$User2024`. It's fake data for presentations.
+### User logins for presentations
+* ashtyn72
+* manuela.corkery
+* yazmin.deckow17
+* griffin_murazik4
+* brenden41
+* lyda.gerhold
+* harmony15
+* lea.goyette
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Admin for presentations
+   ```text
+      login: admin
+      email: admin@techcloud.com
+      password: $Admin2024
+   ```
 
-### `npm test`
+## Ethereal for emails
+[Ethereal](https://ethereal.email/) is a fake SMTP service, mostly aimed at Nodemailer and EmailEngine users (but not limited to). It's a completely free anti-transactional email service where messages never get delivered.
+To view the letter that the user will receive, you need to log in to this service using a test login and password.
+```text
+login: ricky43@ethereal.email
+password: 4e1zbM2nxsMu2d823E
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Additional Features
+- Favorite posts - users can add posts to favorites and see this list.
+- Most useful comment - the author of the post can set the most useful comments that solved their problem described in the post. Only post authors can set this value.
+- Most interesting posts - administrators can select the posts that will be displayed on the main page of the site. Usually these are the most interesting posts.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Presentation
+### Main Page
+![](docs/main_page.png)
+### User Page
+![](docs/user_page.png)
+### Category Page
+![](docs/category_page.png)
+### Post Page
+![](docs/post_page.png)
